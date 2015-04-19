@@ -1,6 +1,8 @@
 
 class StyleRoute < StyleController
 
+  error do halt_500 end
+
   route :get, '/'                   do dispatch(:index_page) end
 
   route :get, '/production'         do dispatch(:production_page) end

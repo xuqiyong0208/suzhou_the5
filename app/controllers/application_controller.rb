@@ -19,12 +19,10 @@ class ApplicationController < Sinarey::Application
   end
 
   error do
-    dump_errors
-    erb :'500'
+    halt_500
   end
 
   def dispatch(klass,action,options={})
-    check_pjax_request
     @temp[:controller] = controller2sym(klass)
     @temp[:action] = action
     set_basic_cache_header
@@ -42,12 +40,13 @@ class ApplicationController < Sinarey::Application
 
   #资源不存在
   def halt_404(msg='')
-    halt 404,msg
+    halt 500, erb(:page_404)
   end
 
   #操作失败
   def halt_500(msg='')
-    halt 500,msg
+    dump_errors
+    halt 500, erb(:page_500)
   end
 
   #请求有误
@@ -68,25 +67,9 @@ class ApplicationController < Sinarey::Application
     erb partial, args
   end
 
-  def redirect_to_index
-    redirect_to "/"
-  end
-
-  def redirect_to_login
-    set_session(:return_to, request.fullpath)
-    redirect_to '/login/signin'
-  end
 
   def redirect_to(route)
     redirect route, 303
-  end
-
-  def set_seo_meta(title = nil, meta_description = nil, meta_keywords = nil)
-      default_description = "随心社区,是一个自由自在的网络社区。"
-      default_keywords = "随心社区,随心365,网络社区,社区"
-      @page_title = "#{title} - 随心社区" if title.present?
-      @page_description = meta_description || default_description    
-      @page_keywords = meta_keywords || default_keywords
   end
 
   def erb_partial(partial)

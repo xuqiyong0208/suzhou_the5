@@ -17,8 +17,6 @@ require 'oj'
 db_logger = {logger: nil && Logger.new(STDOUT)}
 db_opts = Sinarey.dbconfig.merge(db_logger)
 
-p db_opts
-
 DB = Sequel.connect(db_opts)
 
 DB.extension(:pagination)
@@ -36,7 +34,7 @@ module Sinarey
     register Sinatra::MultiRoute
 
     helpers Sinatra::Cookies
-    set :cookie_options, {path:'/',expires:1.year.from_now,httponly:false}
+    set :cookie_options, {path:'/', expires: 2.weeks.from_now,httponly:false}
 
     set :static, false
 
@@ -45,17 +43,17 @@ module Sinarey
 
     set :erb, trim: '>'
 
-    set :raise_errors, false
+    
     set :dump_errors, false
-
+    set :raise_errors, false
+    set :show_exceptions, false
     case Sinarey.env
     when 'production'
-      set :show_exceptions, false
+      #nothing
     else
       require "sinatra/sinarey_reloader"
       register Sinatra::SinareyReloader
       Dir["#{Sinarey.root}/app/*/*.rb"].each {|f| also_reload f }
-      set :show_exceptions, true
     end
 
     #use custom logic for finding template files

@@ -5,7 +5,7 @@ database:
   collation: utf8mb4_unicode_ci
   default_string_column_size: 191
   reconnect: true
-  pool: 1
+  pool: 2
   username: username
   password: password
   database: database

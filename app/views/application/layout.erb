@@ -1,26 +1,13 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-
-	<title><%= @page_title || "苏州第五季食品科技有限公司" %></title>
-	<link href="<%~ static_url("style/style.css") %>" rel="stylesheet" type="text/css" />
-
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-</head>
-
-<body>
-
-</body>
-</html>
 
 <!DOCTYPE HTML>
 <html>
 <head>
   <title><%= @page_title || "苏州第五季食品科技有限公司" %></title>
+  <link href="<%~ static_url("style/style.css") %>" rel="stylesheet" type="text/css" />
 
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
   <%= content_for?(:head).confirm && yield_content(:head) %>
 </head>
@@ -31,22 +18,24 @@
 
   <div class="bodyScript">
 
-	<script type="text/javascript" src="<%~ static_url("js/jQuery-1.11.2.js") %>"></script>
-	<script type="text/javascript" src="<%~ static_url("js/main.js") %>"></script>
-	<script type="text/javascript" src="<%~ static_url("js/unslider.js") %>"></script>
+  	<script type="text/javascript" src="<%~ static_url("js/jQuery-1.11.2.js") %>"></script>
+  	<script type="text/javascript" src="<%~ static_url("js/unslider.js") %>"></script>
 
   	<script type="text/javascript">
 		$(function() {
-			$('.banner').unslider({
-				speed: 500,     
-				delay: 3000,
-				complete: function() {},
-				keys: true,
-				dots: true,
-				fluid: false   	
-				});
+
+      if(window.chrome) {
+        $('.banner li').css('background-size', '100% 100%');
+      }
+
+      $('.banner').unslider({
+        fluid: true,
+        dots: true,
+        speed: 1000
+      });
+
 		});
-	</script>
+	  </script>
 
     <%= content_for?(:bodyScript).confirm && yield_content(:bodyScript) %>
   </div>

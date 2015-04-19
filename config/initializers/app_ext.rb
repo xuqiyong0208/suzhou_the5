@@ -1,4 +1,8 @@
 
+def controller2sym(klass)
+  klass.name.underscore[0..-12].to_sym
+end
+
 #中英文字符 长度验证 英文按照半个中文处理
 class String
 

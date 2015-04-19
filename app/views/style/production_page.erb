@@ -23,94 +23,9 @@
 </div>
 <div class="main clear">
 	<div class="product">
-	<div class="left">
-    	<div class="left_nav">
-        	<div class="ln_item">
-            	<i class="n1"></i>
-                <h2><a href="#">茶叶</a></h2>
-                <div class="s_menu">
-                	<a href="#">大红袍</a><a href="#">铁观音（清香型）</a>
-                    <a href="#">铁观音（浓香型）</a><a href="#">福鼎白茶</a>
-                    <a href="#">正山小种</a><a href="#">茉莉花茶（龙珠）</a>
-                </div>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n2"></i>
-                <h2><a href="#">杨梅</a></h2>
-                <div class="s_menu">          
-                	<a href="#">碳梅</a><a href="#">东魁A</a>
-                    <a href="#">东魁B</a>
-                </div>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n3"></i>
-                <h2><a href="#">荔枝</a></h2>
-                <div class="s_menu">          
-                	<a href="#">糯米糍</a><a href="#">桂味</a>
-                    <a href="#">妃子笑</a>
-                </div>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n4"></i>
-                <h2><a href="#">大米</a></h2>
-                <div class="s_menu">
-                	<a href="#">富硒米</a><a href="#">糙米</a>
-                    <a href="#">有机大米</a>
-                </div>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n5"></i>
-                <h2><a href="#">猪肉及蔬菜</a></h2>
-                <div class="s_menu">
-                	<a href="#">黑毛猪</a><a href="#">巴马香猪</a>
-                    <a href="#">藏香猪</a><a href="#">肉禽蔬菜礼包</a>
-                </div>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n6"></i>
-                <h2><a href="#">鸡头米</a></h2>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n7"></i>
-                <h2><a href="#">大闸蟹</a></h2>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n8"></i>
-                <h2><a href="#">苹果</a></h2>
-                <div class="s_menu">
-                	<a href="#">套袋富士</a><a href="#">冰糖心</a>
-                </div>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n9"></i>
-                <h2><a href="#">赣南脐橙</a></h2>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n10"></i>
-                <h2><a href="#">赣南沙田柚</a></h2>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n11"></i>
-                <h2><a href="#">砂糖橘</a></h2>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n12"></i>
-                <h2><a href="#">菌菇礼包</a></h2>
-            </div>
-            
-        </div>
-    </div>
+        
+	<%= erb :_category_panel, locals: {categories: @categories} %>
+
     <div class="product_right">
     	<div class="hotPro">
         	<h1>热销产品</h1>

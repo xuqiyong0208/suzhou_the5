@@ -6,7 +6,7 @@ I18n.enforce_available_locales = false
 
 require File.expand_path('boot', __dir__)
 
-require 'digest'
+require File.expand_path('settings', __dir__)
 
 require File.expand_path('sinarey', __dir__)
 
@@ -26,5 +26,6 @@ require 'sinarey/router'
 AppRouter = Sinarey::Router.new do
   mount StaticRoute
   mount StyleRoute
+  mount BackendRoute
   notfound NotFoundRoute
 end

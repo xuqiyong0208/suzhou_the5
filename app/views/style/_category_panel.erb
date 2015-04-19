@@ -1,0 +1,22 @@
+<% categories ||= {} %>
+
+<div class="left">
+  <div class="left_nav">
+
+        <% if categories[:root].present? %>
+        <% categories[:root].each do |category| %>
+        <div class="ln_item">
+          <i class="<%~ category.logo_class %>"></i>
+            <h2><a href="<%~ "/production/#{category.name}" %>"><%~ category.title %></a></h2>
+            <% if categories[category.name].present? %>
+            <div class="s_menu">
+              <% categories[category.name].each do |sub_category| %>
+              <a href="<%~ "/production/#{sub_category.name}" %>"><%~ sub_category.title %></a>
+              <% end %>
+            </div>
+            <% end %>
+        </div>
+        <% end %>
+        <% end %>
+    </div>
+</div>

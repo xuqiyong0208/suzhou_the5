@@ -25,6 +25,10 @@ module ApplicationHelper
     File.join("#{Settings.static_root}","#{@temp[:version_path]}","#{file}")
   end
 
+  def backend_static_url(file)
+    static_url(File.join("backend","#{file}"))
+  end
+
   #获取文件url
   def file_url(file_path)
     return file_path if file_path.nil? or file_path.empty?

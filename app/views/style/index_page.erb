@@ -12,115 +12,32 @@
 	</div>
     </div>
 </div>
-<div class="banner">
-	<ul>
-		<li style="background: url(<%~ static_url("images/ba01.jpg") %>);"></li>
-		<li style="background: url(<%~ static_url("images/ba02.jpg") %>);"></li>
-		<li style="background: url(<%~ static_url("images/ba03.jpg") %>);"></li>
-		<li style="background: url(<%~ static_url("images/ba04.jpg") %>);"></li>
-		<li style="background: url(<%~ static_url("images/ba05.jpg") %>);"></li>
-	</ul>
+<div style="position:relative;clear:both;width:100%;">
+    <div class="banner">
+    	<ul>
+    		<li style="background: url(<%~ static_url("images/ba01.jpg") %>);"></li>
+    		<li style="background: url(<%~ static_url("images/ba02.jpg") %>);"></li>
+    		<li style="background: url(<%~ static_url("images/ba03.jpg") %>);"></li>
+    		<li style="background: url(<%~ static_url("images/ba04.jpg") %>);"></li>
+    		<li style="background: url(<%~ static_url("images/ba05.jpg") %>);"></li>
+    	</ul>
+    </div>
 </div>
 <div class="main clear">
 	<div class="home">
-	<div class="left">
-    	<div class="left_nav">
-        	<div class="ln_item">
-            	<i class="n1"></i>
-                <h2><a href="#">茶叶</a></h2>
-                <div class="s_menu">
-                	<a href="#">大红袍</a><a href="#">铁观音（清香型）</a>
-                    <a href="#">铁观音（浓香型）</a><a href="#">福鼎白茶</a>
-                    <a href="#">正山小种</a><a href="#">茉莉花茶（龙珠）</a>
-                </div>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n2"></i>
-                <h2><a href="#">杨梅</a></h2>
-                <div class="s_menu">          
-                	<a href="#">碳梅</a><a href="#">东魁A</a>
-                    <a href="#">东魁B</a>
-                </div>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n3"></i>
-                <h2><a href="#">荔枝</a></h2>
-                <div class="s_menu">          
-                	<a href="#">糯米糍</a><a href="#">桂味</a>
-                    <a href="#">妃子笑</a>
-                </div>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n4"></i>
-                <h2><a href="#">大米</a></h2>
-                <div class="s_menu">
-                	<a href="#">富硒米</a><a href="#">糙米</a>
-                    <a href="#">有机大米</a>
-                </div>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n5"></i>
-                <h2><a href="#">猪肉及蔬菜</a></h2>
-                <div class="s_menu">
-                	<a href="#">黑毛猪</a><a href="#">巴马香猪</a>
-                    <a href="#">藏香猪</a><a href="#">肉禽蔬菜礼包</a>
-                </div>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n6"></i>
-                <h2><a href="#">鸡头米</a></h2>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n7"></i>
-                <h2><a href="#">大闸蟹</a></h2>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n8"></i>
-                <h2><a href="#">苹果</a></h2>
-                <div class="s_menu">
-                	<a href="#">套袋富士</a><a href="#">冰糖心</a>
-                </div>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n9"></i>
-                <h2><a href="#">赣南脐橙</a></h2>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n10"></i>
-                <h2><a href="#">赣南沙田柚</a></h2>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n11"></i>
-                <h2><a href="#">砂糖橘</a></h2>
-            </div>
-            
-            <div class="ln_item">
-            	<i class="n12"></i>
-                <h2><a href="#">菌菇礼包</a></h2>
-            </div>
-            
-        </div>
-    </div>
+
+    <%= erb :_category_panel, locals: {categories: @categories} %>
+
     <div class="right">
     	<div class="exchange"><a href="#">卡券兑换</a></div>
         <div class="video_box">
         	<ul>
-            	<li><a href="javascript:;"><i></i></a></li>
-                <li><a href="javascript:;"><i></i></a></li>
-                <li><a href="javascript:;"><i></i></a></li>
-                <li><a href="javascript:;"><i></i></a></li>
-                <li><a href="javascript:;"><i></i></a></li>
-                <li><a href="javascript:;"><i></i></a></li>
+            	<li><a class="mediaplayer1" href="javascript:;"><i></i></a></li>
+                <li><a class="mediaplayer2" href="javascript:;"><i></i></a></li>
+                <li><a class="mediaplayer1" href="javascript:;"><i></i></a></li>
+                <li><a class="mediaplayer2" href="javascript:;"><i></i></a></li>
+                <li><a class="mediaplayer1" href="javascript:;"><i></i></a></li>
+                <li><a class="mediaplayer2" href="javascript:;"><i></i></a></li>
             </ul>
         </div>
     </div>
@@ -141,17 +58,67 @@
 </div>
 
 <div class="mask"></div>
-<div class="tab">
-	<div id="mediaplayer">JW Player goes here</div>
+<div class="tab mediaplayer1">
+    <div id="mediaplayer1"></div>
 </div>
+
+<div class="tab mediaplayer2">
+    <div id="mediaplayer2"></div>
+</div>
+
+<% content_for(:bodyScript) do %>
 <script type="text/javascript" src="<%~ static_url("js/jwplayer.js") %>"></script>
 <script type="text/javascript">
-jwplayer("mediaplayer").setup({
-	flashplayer: "<%~ static_url("swf/player.swf") %>",
-	image: "<%~ static_url("video/demo.jpg") %>",
+
+jwplayer("mediaplayer1").setup({
+    flashplayer: "<%~ static_url("swf/player.swf") %>",
+    image: "<%~ static_url("video/demo.jpg") %>",
     file: "<%~ static_url("video/demo.mp4") %>",
     controlbar: 'bottom',
-	height : 460,
-	width : 760, 
+    height : 460,
+    width : 760, 
 });
+jwplayer("mediaplayer2").setup({
+    flashplayer: "<%~ static_url("swf/player.swf") %>",
+    image: "<%~ static_url("video/demo2.png") %>",
+    file: "<%~ static_url("video/demo2.mp4") %>",
+    controlbar: 'bottom',
+    height : 460,
+    width : 760, 
+});
+
+$(function(){
+
+    function popup(t,b){
+
+        $(b).bind('click',function(){
+
+            var doc_height = $(document).height();
+            var doc_width = $(document).width();
+            var win_height = $(window).height();
+            var win_width = $(window).width();
+            
+            var layer_height = $(t).height();
+            var layer_width = $(t).width();
+
+            $(".mask").css({display:'block',height:doc_height});
+                $(t).css('top',(win_height-layer_height)/2);
+                $(t).css('left',(win_width-layer_width)/2);
+                $(t).css('display','block');
+                return false;
+            }
+        )
+        $(document).bind('click', function(e) {
+            var $clicked = $(e.target);
+            if (! $clicked.hasClass("tab")){
+                $(t).css('display','none');
+                $(".mask").css('display','none');
+            }
+        });
+    }
+
+    popup(".tab.mediaplayer1",".video_box a.mediaplayer1");
+    popup(".tab.mediaplayer2",".video_box a.mediaplayer2");
+})
 </script>
+<% end %>

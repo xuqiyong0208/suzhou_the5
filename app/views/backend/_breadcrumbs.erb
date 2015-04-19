@@ -1,0 +1,16 @@
+<%
+  breadcrumbs ||= {}
+%>
+<% if breadcrumbs.present? %>
+<% content_for(:breadcrumbs) do %>
+<article class="breadcrumbs">
+  <a href="/admin">后台系统</a>
+  <% num = 1 %>
+  <% breadcrumbs.each do |title, link| %>
+  <div class="breadcrumb_divider"></div>
+  <a class="<%~ "current" if breadcrumbs.length==num %>"><%~ title %></a>
+  <% num += 1 %>
+  <% end %>
+</article>
+<% end %>
+<% end %>

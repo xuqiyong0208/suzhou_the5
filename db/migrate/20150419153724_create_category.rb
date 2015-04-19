@@ -2,12 +2,15 @@ class CreateCategory < ActiveRecord::Migration
   def change
     create_table :tb_category do |t|
       
-      t.string :name, unique: true
-      t.string :title
-      t.string :father
+      t.string :name, limit: 191
+      t.string :title, limit: 191
+      t.string :father, limit: 191
+      t.string :logo_class, limit: 191
+
+      t.string :cover_pic_path, limit: 191
 
       t.timestamps
     end
-    add_index :tb_category, :name
+    add_index :tb_category, :name, :unique => true
   end
 end
