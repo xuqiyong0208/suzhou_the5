@@ -1,0 +1,17 @@
+pid: tmp/pids/thin.production.pid
+timeout: 30
+wait: 500
+#log: log/thin.production.log
+#max_conns: 1024
+#require: []
+environment: production
+#max_persistent_conns: 512
+#servers: 2
+threaded: false
+#no-epoll: true
+#daemonize: true
+#socket: tmp/sockets/thin.sock
+#chdir: /workspaces/ruby/subapp3/subapp
+#tag: comforthouse2
+port: 8080
+#onebyone: true
