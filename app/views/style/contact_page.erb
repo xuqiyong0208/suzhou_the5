@@ -20,15 +20,9 @@
 	</div>
     </div>
 </div>
-<div class="banner">
-	<ul>
-		<li style="background: url(<%~ static_url("images/ba01.jpg);") %>"></li>
-		<li style="background: url(<%~ static_url("images/ba02.jpg);") %>"></li>
-		<li style="background: url(<%~ static_url("images/ba03.jpg);") %>"></li>
-		<li style="background: url(<%~ static_url("images/ba04.jpg);") %>"></li>
-		<li style="background: url(<%~ static_url("images/ba05.jpg);") %>"></li>
-	</ul>
-</div>
+
+<%= erb :_banner %>
+
 <div class="main clear">
 	<div class="contact">
     	<div class="contact_left">
@@ -131,17 +125,18 @@
         </div>
         <div class="contact_right">
         	<h1>联系我们</h1>
-			<h3>苏州第五季有限公司</h3>
-            <p>专注于创新和探索交互式设计开发，致力于为品牌提供全新的数字化营销服务，为企业提供策略咨询、创意设计、定制开发、运营及推广等全方位服务。</p>
-            <p>我们强调个性定制化的方式与客户沟通，通过新创意、新技术、新媒体的结合运用，为客户提供整合的数字化交互解决方案与全方位的视觉传播服务。</p>
-            <p>Aidimedia focus on innovation and explore interactive design and development, is committed to the brand new digital marketing services, providing full-service strategic consulting, creative design, custom development, operations and marketing.</p>
-            <p>We emphasize personalized customized way to communicate with customers, using a combination of new ideas, new technologies, new media, to provide customers with integrated digital interactive solutions and a full range of visual communication services.</p>
+						
+            <h3 style="padding-left: 2px;">苏州第五季有限公司</h3>
             <ul>
             	<li class="dz">江苏省苏州市相城区太平街道金澄路88号</li>
             	<li class="dh">0512-69575557</li>
             	
             	<li class="mail">vigor_hu5@126.com</li>
-        	</ul>
+        		</ul>
+						<br>
+
+            <%= sanitize_content @contact.content.to_s %>
+            
         </div>
     </div>
 </div>

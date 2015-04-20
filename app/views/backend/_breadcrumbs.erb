@@ -4,11 +4,15 @@
 <% if breadcrumbs.present? %>
 <% content_for(:breadcrumbs) do %>
 <article class="breadcrumbs">
-  <a href="/admin">后台系统</a>
+  <a href="/admin">苏州第五季管理系统</a>
   <% num = 1 %>
   <% breadcrumbs.each do |title, link| %>
   <div class="breadcrumb_divider"></div>
-  <a class="<%~ "current" if breadcrumbs.length==num %>"><%~ title %></a>
+  <% if breadcrumbs.length==num %>
+    <a class="current"><%~ title %></a>
+  <% else %>
+    <a href="<%~ link %>"><%~ title %></a>
+  <% end %>
   <% num += 1 %>
   <% end %>
 </article>

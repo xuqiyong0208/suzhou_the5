@@ -24,11 +24,8 @@
     	<div class="proBox">
         	<h1><%~ @category.title %></h1>
             <div class="proBox_con">
-        	<div class="proBox_img"><img src="<%~ static_url("images/pro-01.jpg") %>" /></div>
-            <p>多喝鲜橙多――鲜橙多含丰富的维生素c。英国医学工作者对641名成年人的血液进行化验后发现，血液中维生素c含量越高的人，其动脉的血压越低。这些研究人员认为，维生素c有助于血管扩张。</p>
-            <p>鲜橙多含有的钙和维生素D可以帮助维持骨骼强度，但至少还需要吃一些蔬菜获得必要的维生素K。果汁里的钙和牛奶的钙一样可以完全被吸收，很适合老年人。</p>
-            <p>鲜橙多含有丰富的水分和维生素，同时拥有很低的热量并且不含有任何脂肪，其丰富的维生素A是保护眼睛的绝佳选择。</p>
-            <p>鲜橙多不透明，它里面含有的天然多糖，其中包括果胶，呈悬浮状。鲜橙多促使肠胃道正常工作，果胶还有助清除随着空气和食品一起进入体内的有害物质。</p>
+        	   <div class="proBox_img"><img src="<%~ static_url("images/pro-01.jpg") %>" /></div>
+                <%= sanitize_content @content.to_s %>
             </div>
         </div>
     </div>

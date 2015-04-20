@@ -1,5 +1,7 @@
 class StyleController < ApplicationController
 
+  include SanitizeHelper
+
   set :views, ['style','application']
 
   def dispatch(action,options={})
@@ -34,16 +36,24 @@ class StyleController < ApplicationController
 
     halt_404 if @category.nil?
 
+    halt_404 if @category.father.nil? and @categories[@category.name]
+
+    record = CategoryDescription.where(category_name: @category.name).first
+    @content = record && record.content
+    @content = "<a href='/admin/category/#{CGI.escape(@category.name)}'>还未填写产品介绍, 点击此处去后台填写</a>" if @content.blank?
+
   	halt_page(:single_production_page)
   end
 
   def about_page
 
+    @intro = Intro.first
   	halt_page(:about_page)
   end
 
   def contact_page
 
+    @contact = Contact.first
   	halt_page(:contact_page)
   end
 

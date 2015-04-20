@@ -56,6 +56,53 @@ rescue Exception => boom
   puts "-------------------------------------------------------\n\n"
 end
 
+#公司介绍
+if !Intro.first
+
+  intro_content = %q{<p>这里是公司介绍的正文。</p>
+<p>可以在在后台管理系统修改此处的文本内容</p>
+<p>以下是示例文本</p>
+
+<p>专注于创新和探索交互式设计开发，致力于为品牌提供全新的数字化营销服务，为企业提供策略咨询、创意设计、定制开发、运营及推广等全方位服务。</p>
+
+<p>我们强调个性定制化的方式与客户沟通，通过新创意、新技术、新媒体的结合运用，为客户提供整合的数字化交互解决方案与全方位的视觉传播服务。</p>
+
+<p>Aidimedia focus on innovation and explore interactive design and development, is committed to the brand new digital marketing services, providing full-service strategic consulting, creative design, custom development, operations and marketing.</p>
+
+<p>We emphasize personalized customized way to communicate with customers, using a combination of new ideas, new technologies, new media, to provide customers with integrated digital interactive solutions and a full range of visual communication services.</p>
+
+<p>公司介绍正文结束</p>
+}
+
+  Intro.create(content:intro_content)
+end
+
+
+#联系我们
+if !Contact.first
+
+  contact_content = %q{<p>这里填写"联系我们"的正文。</p>
+<p>可以在在后台管理系统修改此处的文本内容</p>
+<p>以下是示例文本</p>
+
+<p>客户服务</p>
+<p>24小时全国服务热线：400-788-3333</p>
+<p>客户服务邮箱：mz_kf@meizu.com</p>
+<p>售后维修邮递信息：珠海市唐家湾高新区留诗路2号厂房1楼，519085，赵胜，400-788-3333</p>
+
+<p>市场推广及品牌合作业务咨询：mz-marketing@meizu.com</p>
+
+<p>认证店加盟、经销商服务咨询：0756-6116236，business@meizu.com</p>
+
+<p>B2C电子商务渠道业务咨询：e-business@meizu.com</p>
+
+<p>魅族软件中心第三方开发者软件的销售、结算等相关事务：mzdn@meizu.com</p>
+
+<p>联系我们正文结束</p>
+}
+
+  Contact.create(content:contact_content)
+end
 
 puts "finish"
 

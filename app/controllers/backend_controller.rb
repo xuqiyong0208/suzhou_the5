@@ -3,7 +3,7 @@ class BackendController < ApplicationController
 
   before do
     set_current_admin
-    require_admin_filter if request.fullpath != "/admin"
+    require_admin_filter if request.path_info != "/admin"
   end
 
   set :views, ['backend','application']
@@ -50,6 +50,90 @@ class BackendController < ApplicationController
     halt_page(:index_page)
   end
 
+  #公司简介管理页
+  def intro_page
+
+    record = Intro.first
+    @content = record.content if record
+
+    halt_page(:intro_page)
+  end
+
+  #修改公司简介
+  def do_update_intro
+    content = params[:content].to_s
+    record = Intro.first
+    if record
+      record.update(content:content)
+    else
+      Intro.create(content:content)
+    end
+    halt_json(res: true)
+  end
+
+  #联系我们管理页
+  def contact_page
+    record = Contact.first
+    @content = record.content if record
+    halt_page(:contact_page)
+  end
+
+  #修改联系我们
+  def do_update_contact
+    content = params[:content].to_s
+    record = Contact.first
+    if record
+      record.update(content:content)
+    else
+      Contact.create(content:content)
+    end
+    halt_json(res: true)
+  end
+
+  #分类管理页面
+  def category_page
+    @categories = Category.all
+
+    @dict = {}
+    @children_exist = {}
+    @categories.each do |category|
+      @dict[category.name] = category.title
+      father = category.father
+      if father.present?
+        @children_exist[father] ||= true
+      end
+    end
+
+    halt_page(:category_page)
+  end
+
+  #编辑分类简介页
+  def edit_category_description_page
+
+    @category = Category.where(name: params[:name].to_s).first
+
+    record = CategoryDescription.where(category_name: @category.name).first
+    @content = record && record.content
+
+    halt_page(:edit_category_description_page)
+  end
+
+  #修改分类简介
+  def do_update_category_description
+
+    category = Category.where(name: params[:name].to_s).first
+    halt_json(res:false, msg: "指定产品不存在") if category.nil?
+
+    content = params[:content].to_s
+    record = CategoryDescription.where(category_name: category.name).first
+    if record
+      record.update(content:content)
+    else
+      CategoryDescription.create(content:content, category_name: category.name)
+    end
+    halt_json(res: true)
+  end
+
   # 登录页
   def login_page
 
@@ -75,9 +159,6 @@ class BackendController < ApplicationController
     halt_json(res: false, msg: "账号或密码不正确") if user.nil?
 
     token = Admin.generate_token(user,client_ip)
-
-    p token
-    p "--------------------"
 
     cookies[:token] = token
 
