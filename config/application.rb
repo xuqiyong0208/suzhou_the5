@@ -12,7 +12,7 @@ require File.expand_path('sinarey', __dir__)
 
 requires = Dir[File.expand_path('initializers/*.rb', __dir__)]
 
-['app/models','app/helpers','app/controllers','app/routes'].each do |path|
+['app/uploaders','app/models','app/helpers','app/controllers','app/routes'].each do |path|
   requires += Dir[File.expand_path("../#{path}/*.rb", __dir__)].sort
 end
 

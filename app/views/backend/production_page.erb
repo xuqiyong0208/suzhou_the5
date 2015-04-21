@@ -1,0 +1,45 @@
+<%= erb :_breadcrumbs,locals: {breadcrumbs: {"产品管理"=>"javascript:;"}} %>
+
+<article class="module width_full">
+  <header>
+    <h3 class="tabs_involved">产品管理</h3>
+  </header>
+  
+  <div class="tab_container">
+    <div id="tab1" class="tab_content" style="display: block;">
+    <table class="tablesorter" cellspacing="0"> 
+    <thead> 
+      <tr> 
+          <th class="header">产品名称</th>
+          <th class="header">产品图片</th>  
+          <th class="header">所属分类</th>
+          <th class="header">管理员操作</th> 
+      </tr>
+    </thead> 
+    <tbody> 
+      <% @categories.each do |category| %>
+      <% next if category.father.nil? and @children_exist[category.name] %>
+      <tr>
+          <td><%~ category.title %></td>
+          <td>
+            <p style="display:inline-block;height:30px;">
+              <% if category.cover_path.url %>
+              <img height="30px" onerror="this.style.display='none';" src="<%~ category.cover_path.url %>" alt="">
+              <% end %>
+            </p>
+          </td> 
+          <td><%~ @dict[category.father] || "主分类" %></td> 
+          <td>
+            <a href="/production/<%~ category.name %>" target="_blank">预览</a> &nbsp; 
+            <a href="/admin/edit_production/<%~ category.id %>">修改信息</a> &nbsp; 
+            <a href="/admin/edit_production_cover/<%~ category.id %>">更新图片</a> &nbsp; 
+            <a href="javascript:destroy_production(<%~ category.id %>)">删除</a> &nbsp; 
+          </td> 
+      </tr>
+      <% end %>
+    </tbody> 
+    </table>
+    </div>
+  </div>
+  
+</article>

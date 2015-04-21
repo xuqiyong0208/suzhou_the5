@@ -38,7 +38,7 @@ class StyleController < ApplicationController
 
     halt_404 if @category.father.nil? and @categories[@category.name]
 
-    record = CategoryDescription.where(category_name: @category.name).first
+    record = CategoryDescription.where(category_id: @category.id).first
     @content = record && record.content
     @content = "<a href='/admin/category/#{CGI.escape(@category.name)}'>还未填写产品介绍, 点击此处去后台填写</a>" if @content.blank?
 

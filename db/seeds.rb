@@ -11,18 +11,18 @@ end
 
 #主分类
 begin
-  Category.create(title: "茶叶", name:"cha_ye", logo_class:"n1")
-  Category.create(title: "杨梅", name:"yang_mei", logo_class:"n2")
-  Category.create(title: "荔枝", name:"li_zhi", logo_class:"n3")
-  Category.create(title: "大米", name:"da_mi", logo_class:"n4")
-  Category.create(title: "猪肉及蔬菜", name:"zhu_rou_ji_shu_cai", logo_class:"n5")
-  Category.create(title: "鸡头米", name:"ji_tou_mi", logo_class:"n6")
-  Category.create(title: "大闸蟹", name:"da_zha_xie", logo_class:"n7")
-  Category.create(title: "苹果", name:"ping_guo", logo_class:"n8")
-  Category.create(title: "赣南脐橙", name:"gan_nan_qi_cheng", logo_class:"n9")
-  Category.create(title: "赣南沙田柚", name:"gan_nan_sha_tian_you", logo_class:"n10")
-  Category.create(title: "砂糖橘", name:"sha_tang_ju", logo_class:"n11")
-  Category.create(title: "菌菇礼包", name:"jun_gu_li_bao", logo_class:"n12")
+  Category.create(title: "茶叶", name:"cha_ye")
+  Category.create(title: "杨梅", name:"yang_mei")
+  Category.create(title: "荔枝", name:"li_zhi")
+  Category.create(title: "大米", name:"da_mi")
+  Category.create(title: "猪肉及蔬菜", name:"zhu_rou_ji_shu_cai")
+  Category.create(title: "鸡头米", name:"ji_tou_mi")
+  Category.create(title: "大闸蟹", name:"da_zha_xie")
+  Category.create(title: "苹果", name:"ping_guo")
+  Category.create(title: "赣南脐橙", name:"gan_nan_qi_cheng")
+  Category.create(title: "赣南沙田柚", name:"gan_nan_sha_tian_you")
+  Category.create(title: "砂糖橘", name:"sha_tang_ju")
+  Category.create(title: "菌菇礼包", name:"jun_gu_li_bao")
 
   #子分类
   Category.create(title: "大红袍", name:"da_hong_pao", father: "cha_ye")

@@ -1,0 +1,92 @@
+<%= erb :_breadcrumbs,locals: {breadcrumbs: {"产品管理"=>"/admin/production","修改#{@category.title}产品信息"=>"javascript:;"}} %>
+
+
+<% content_for(:head) do %>
+    <script>window.STATIC_URL="<%~ backend_static_url("") %>"</script>
+    <script type="text/javascript" src="<%~ backend_static_url "ueditor/ueditor.config.js" %>"></script>
+    <script type="text/javascript" src="<%~ backend_static_url "ueditor/editor_api.js" %>"></script>
+<% end %>
+
+<article class="module width_full">
+  <header><h3>修改产品信息 | <%~ @category.title %></h3></header>
+
+  <div class="module_content">
+  
+    <form id="edit_production_page_form">
+
+      <input type="hidden" name="id" value="<%~ @category.id %>">
+
+      <fieldset>
+        <label style="width:300px;">产品ID</label>
+        <input type="text" name="name" value="<%~ @category.name %>">
+      </fieldset>
+
+      <fieldset>
+        <label>产品名称</label>
+        <input type="text" name="title" value="<%~ @category.title %>">
+      </fieldset>
+
+      <fieldset>
+        <div style="height:25px;"><label>产品介绍</label></div>
+        <div>
+          <script type="text/plain" id="myEditor"></script>
+          <input type="hidden" name="content" value="<%~ @ccontent %>">
+        </div>
+      </fieldset>
+
+      <script type="text/javascript">
+        window.editor = UE.getEditor('myEditor',{
+          toolbars:[['FullScreen', 'Source', 'Undo', 'Redo','Bold','|','link']],
+          initialFrameHeight:300,
+          initialFrameWidth: "100%",
+          wordCount:false,
+          elementPathEnabled:false,
+          enableAutoSave:false
+        });
+
+        window.editor.ready(function() {
+          window.editor.setContent("<%= escape_javascript @content.to_s %>");
+        });
+
+
+        var do_update_intro = function(){
+          var content = window.editor.getContent();
+          var $form = $("#edit_production_page_form");
+
+          $form.find("[name=content]").val(content);
+
+          $.ajax({
+              type: "POST",
+              url: "/admin/update_category_description",
+              data: $form.serialize(),
+              dataType: "json",
+              success: function (data) {
+                if(data.res){
+                  alert("保存成功");
+                }else{
+                  if(data.msg){
+                    alert(data.msg);
+                  }
+                }
+              },
+              error: function (msg) {
+                alert("抱歉，保存失败！");
+              }
+          });
+        }
+
+      </script>
+
+      <br>
+  
+    </form>
+
+  </div>
+  <footer>
+    <div class="submit_link">
+      <input type="submit" value="保存" class="alt_btn" onclick="do_update_intro();">&nbsp;
+      <input type="submit" value="重置" onclick="window.location.reload();">&nbsp;
+      <input type="submit" value="预览" onclick="window.open('/production/<%~ @category.name %>');">
+    </div>
+</footer>
+</article>

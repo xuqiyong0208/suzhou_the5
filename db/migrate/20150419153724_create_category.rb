@@ -5,9 +5,9 @@ class CreateCategory < ActiveRecord::Migration
       t.string :name, limit: 191
       t.string :title, limit: 191
       t.string :father, limit: 191
-      t.string :logo_class, limit: 191
-
-      t.string :cover_pic_path, limit: 191
+      
+      t.string :logo_path, limit: 191
+      t.string :cover_path, limit: 191
 
       t.timestamps
     end

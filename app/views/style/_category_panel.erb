@@ -6,7 +6,7 @@
         <% if categories[:root].present? %>
         <% categories[:root].each do |category| %>
         <div class="ln_item">
-          <i class="<%~ category.logo_class %>"></i>
+          <i><% if category.logo_path.url %><img onerror="this.style='display:none;'" src="<%~ category.logo_path.url %>" /><% end %></i>
             <% link = categories[category.name].present? ? "javascript:;" : "/production/#{category.name}" %>
             <h2><a href="<%~ link %>"><%~ category.title %></a></h2>
             <% if categories[category.name].present? %>

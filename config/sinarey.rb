@@ -13,6 +13,10 @@ require 'will_paginate'
 require 'timerizer'
 require 'oj'
 
+require 'active_support'
+require 'carrierwave-aliyun'
+require 'carrierwave/sequel'
+
 
 db_logger = {logger: nil && Logger.new(STDOUT)}
 db_opts = Sinarey.dbconfig.merge(db_logger)

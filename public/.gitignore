@@ -1,4 +1,5 @@
 assets/uploads/*
 assets/web-built/*
 uploads/tmp/*
+assets/carrier_wave/*
 !.gitignore

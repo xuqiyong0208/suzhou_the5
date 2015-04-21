@@ -17,11 +17,27 @@ class BackendRoute < BackendController
 
   route :post,  '/admin/contact'        do dispatch(:do_update_contact) end
 
+  route :get,   '/admin/production'       do dispatch(:production_page) end
+
+  route :get,   '/admin/edit_production/:id' do dispatch(:edit_production_page) end
+
+  route :post,  '/admin/update_production' do dispatch(:do_update_production) end
+
+  route :get,   '/admin/edit_production_cover/:id' do dispatch(:edit_production_cover_page) end
+
+  route :post,  '/admin/update_production_cover' do dispatch(:do_update_production_cover) end
+
   route :get,   '/admin/category'       do dispatch(:category_page) end
 
-  route :get,   '/admin/category/:name' do dispatch(:edit_category_description_page) end
+  route :get,   '/admin/edit_category/:id'   do dispatch(:edit_category_page) end
 
-  route :post,  '/admin/update_category_description' do dispatch(:do_update_category_description) end
+  route :post,  '/admin/update_category' do dispatch(:do_update_category) end
+
+  route :get,   '/admin/edit_category_logo/:id' do dispatch(:edit_category_logo_page) end
+
+  route :post,  '/admin/update_category_logo' do dispatch(:do_update_category_logo) end
+
+
 
   route :get,   '/ueditor/server_url' do
 

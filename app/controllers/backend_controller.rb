@@ -91,7 +91,7 @@ class BackendController < ApplicationController
   end
 
   #分类管理页面
-  def category_page
+  def production_page
     @categories = Category.all
 
     @dict = {}
@@ -104,34 +104,118 @@ class BackendController < ApplicationController
       end
     end
 
-    halt_page(:category_page)
+    halt_page(:production_page)
   end
 
-  #编辑分类简介页
-  def edit_category_description_page
+  #编辑产品信息页
+  def edit_production_page
 
-    @category = Category.where(name: params[:name].to_s).first
+    @category = Category.where(id: params[:id].to_i).first
 
-    record = CategoryDescription.where(category_name: @category.name).first
+    record = CategoryDescription.where(category_id: @category.id).first
     @content = record && record.content
 
-    halt_page(:edit_category_description_page)
+    halt_page(:edit_production_page)
   end
 
-  #修改分类简介
-  def do_update_category_description
+  #修改产品信息
+  def do_update_production
 
-    category = Category.where(name: params[:name].to_s).first
+    category = Category.where(id: params[:id].to_i).first
     halt_json(res:false, msg: "指定产品不存在") if category.nil?
 
+    name, title = params[:name].to_s, params[:title].to_s
+    halt_json(res:false, msg: "请输入产品ID") if name.blank?
+
+    halt_json(res:false, msg: "产品ID格式不正确，仅支持英文字母、数字以及下划线") if !name_regex_match?(name)
+
+    halt_json(res:false, msg: "请输入产品名称") if title.blank?
+
+    category.name = name
+    category.title = title
+    category.save
+
     content = params[:content].to_s
-    record = CategoryDescription.where(category_name: category.name).first
+    record = CategoryDescription.where(category_id: category.id).first
     if record
       record.update(content:content)
     else
-      CategoryDescription.create(content:content, category_name: category.name)
+      CategoryDescription.create(content:content, category_id: category.name)
     end
-    halt_json(res: true)
+    halt_json(res:true)
+  end
+
+  #编辑产品信息页
+  def edit_production_cover_page
+
+    @category = Category.where(id: params[:id].to_i).first
+
+    halt_page(:edit_production_cover_page)
+  end
+
+  #更新产品图片
+  def do_update_production_cover
+    @category = Category.where(id: params[:id].to_i).first
+    if @category
+      cover_path = params[:cover_path]
+      if cover_path and cover_path.class == Hash
+        @category.cover_path = cover_path
+        p cover_path
+        @category.save
+      end
+    end
+    redirect_to request.referer || "/admin"
+  end
+
+  # 主分类管理页
+  def category_page
+
+    @categories = Category.where(father:nil).all
+
+    halt_page(:category_page)
+  end
+
+  #编辑主分类信息页
+  def edit_category_page
+
+    @category = Category.where(id: params[:id].to_i).first
+
+    halt_page(:edit_category_page)
+  end
+
+  def do_update_category
+
+    category = Category.where(id: params[:id].to_i).first
+    halt_json(res:false, msg: "指定主分类不存在") if category.nil?
+
+    name, title = params[:name].to_s, params[:title].to_s
+    halt_json(res:false, msg: "请输入主分类ID") if name.blank?
+
+    halt_json(res:false, msg: "主分类ID格式不正确，仅支持英文字母、数字以及下划线") if !name_regex_match?(name)
+
+    halt_json(res:false, msg: "请输入主分类名称") if title.blank?
+
+    category.name = name
+    category.title = title
+    category.save
+
+    content = params[:content].to_s
+    record = CategoryDescription.where(category_id: category.id).first
+    if record
+      record.update(content:content)
+    else
+      CategoryDescription.create(content:content, category_id: category.name)
+    end
+    halt_json(res:true)
+  end
+
+
+  def edit_category_logo_page
+    "edit_category_logo_page called"
+  end
+
+  def do_update_category_logo
+    "do_update_category_logo called"
   end
 
   # 登录页
@@ -174,5 +258,13 @@ class BackendController < ApplicationController
 
     redirect_to "/admin"
   end
+
+  private
+
+  def name_regex_match?(name)
+    return false if name.blank?
+    name == name.match(/\A[a-zA-Z0-9_]+\z/).to_s
+  end
+
 
 end

@@ -1,0 +1,32 @@
+<%= erb :_breadcrumbs,locals: {breadcrumbs: {"主分类管理"=>"/admin/category","修改#{@category.title}产品信息"=>"javascript:;"}} %>
+
+<article class="module width_full">
+  <header><h3>修改主分类信息 | <%~ @category.title %></h3></header>
+
+  <div class="module_content">
+  
+    <form id="edit_production_page_form">
+
+      <input type="hidden" name="id" value="<%~ @category.id %>">
+
+      <fieldset>
+        <label style="width:300px;">主分类ID</label>
+        <input type="text" name="name" value="<%~ @category.name %>">
+      </fieldset>
+
+      <fieldset>
+        <label>主分类名称</label>
+        <input type="text" name="title" value="<%~ @category.title %>">
+      </fieldset>
+
+    </form>
+
+  </div>
+  <footer>
+    <div class="submit_link">
+      <input type="submit" value="保存" class="alt_btn" onclick="do_update_intro();">&nbsp;
+      <input type="submit" value="重置" onclick="window.location.reload();">&nbsp;
+      <input type="submit" value="预览" onclick="window.open('/production/<%~ @category.name %>');">
+    </div>
+</footer>
+</article>

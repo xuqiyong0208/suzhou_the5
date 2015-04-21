@@ -35,6 +35,13 @@ gem 'ruby-hmac'
 gem 'sequel'
 gem 'mysql2'
 
+#图片处理
+gem 'carrierwave'
+gem 'carrierwave-aliyun'
+gem 'carrierwave-sequel'
+
+gem 'mini_magick'
+
 #rake tasks
 gem 'rake'
 gem 'activerecord'
