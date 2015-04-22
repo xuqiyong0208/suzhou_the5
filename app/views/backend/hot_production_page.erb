@@ -1,0 +1,91 @@
+<%= erb :_breadcrumbs,locals: {breadcrumbs: {"产品管理"=>"/admin/production","配置热销产品"=>"javascript:;"}} %>
+
+<article class="module width_full">
+  <header><h3>配置热销产品</h3></header>
+
+  <form id="page_form">
+
+    <article class="module width_3_quarter">
+      <header>
+        <h3 class="tabs_involved">选择产品</h3>
+      </header>
+
+      <table class="tablesorter" cellspacing="0"> 
+        <thead> 
+          <tr> 
+              <th class="header"></th> 
+              <th class="header">产品图片</th> 
+              <th class="header">产品名称</th> 
+              <th class="header">产品分类</th> 
+          </tr> 
+        </thead> 
+        <tbody>
+          <% @productions.each_value do |production| %>
+          <tr> 
+              <td><input type="checkbox" name="ids[]" value="<%~ production.id %>" <%= "checked" if @pids[production.id] %>></td> 
+              <td style="padding:0;">
+                <p style="display:inline-block;height:30px;margin: 0;">
+                  <% if production.cover_path.url %>
+                  <img height="30px" onerror="this.style.display='none';" src="<%~ production.cover_path.url %>" alt="">
+                  <% end %>
+                </p>
+              </td> 
+              <td><%~ production.title %></td> 
+              <td><%~ @category_dict[production.father] || "主分类" %></td> 
+          </tr>
+          <% end %>
+        </tbody> 
+      </table>
+    </article>
+
+    <article class="module width_quarter">
+      <header><h3>当前热销产品</h3></header>
+      <div>
+        <div class="module_content">
+          <% @pids.each_value do |id| %>
+          <% production = @productions[id] %>
+          <% next if production.nil? %>
+          <div class="message" style="padding:5px 0;">
+            <strong><%~ production.title %></strong>
+          </div>
+          <% end %>
+        </div>
+      </div>
+    </article>
+
+    <div class="clear"></div>
+
+    <script type="text/javascript">
+
+      var update_hot_production = function(){
+        var $form = $("#page_form");
+        $.ajax({
+            type: "POST",
+            url: "/admin/hot_production",
+            data: $form.serialize(),
+            dataType: "json",
+            success: function (data) {
+              if(data.res){
+                window.location.reload();
+              }else{
+                if(data.msg){
+                  alert(data.msg);
+                }
+              }
+            },
+            error: function (msg) {
+              alert("抱歉，保存失败！");
+            }
+        });
+      }
+    </script>
+
+  </form>
+  <br>
+  <footer>
+    <div class="submit_link">
+      <input type="submit" value="保存" class="alt_btn" onclick="update_hot_production();">&nbsp;
+      <input type="submit" value="返回" onclick="window.location.href='/admin/production';">&nbsp;
+    </div>
+  </footer>
+</article>

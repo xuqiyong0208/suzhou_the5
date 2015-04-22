@@ -1,8 +1,12 @@
 <%= erb :_breadcrumbs,locals: {breadcrumbs: {"产品管理"=>"javascript:;"}} %>
 
 <article class="module width_full">
-  <header>
+  <header style="position:relative;">
     <h3 class="tabs_involved">产品管理</h3>
+    <span style="display: inline-block;position: absolute;right: 15px;top: 5px;">
+      <input type="submit" value="创建新产品" class="alt_btn" onclick="window.location.href='/admin/new_production';">
+      <input type="submit" value="配置热销产品" class="alt_btn" onclick="window.location.href='/admin/hot_production';">
+    </span>
   </header>
   
   <div class="tab_container">
@@ -17,23 +21,22 @@
       </tr>
     </thead> 
     <tbody> 
-      <% @categories.each do |category| %>
-      <% next if category.father.nil? and @children_exist[category.name] %>
+      <% @productions.each do |production| %>
       <tr>
-          <td><%~ category.title %></td>
+          <td><%~ production.title %></td>
           <td>
             <p style="display:inline-block;height:30px;">
-              <% if category.cover_path.url %>
-              <img height="30px" onerror="this.style.display='none';" src="<%~ category.cover_path.url %>" alt="">
+              <% if production.cover_path.url %>
+              <img height="30px" onerror="this.style.display='none';" src="<%~ production.cover_path.url %>" alt="">
               <% end %>
             </p>
           </td> 
-          <td><%~ @dict[category.father] || "主分类" %></td> 
+          <td><%~ @category_dict[production.father] || "主分类" %></td> 
           <td>
-            <a href="/production/<%~ category.name %>" target="_blank">预览</a> &nbsp; 
-            <a href="/admin/edit_production/<%~ category.id %>">修改信息</a> &nbsp; 
-            <a href="/admin/edit_production_cover/<%~ category.id %>">更新图片</a> &nbsp; 
-            <a href="javascript:destroy_production(<%~ category.id %>)">删除</a> &nbsp; 
+            <a href="/admin/edit_production/<%~ production.id %>">修改信息</a> &nbsp; 
+            <a href="/admin/edit_production_cover/<%~ production.id %>">更新图片</a> &nbsp; 
+            <a href="/production/<%~ production.name %>" target="_blank">打开网页查看</a> &nbsp; 
+            <a href="javascript:destroy_production(<%~ production.id %>,'<%= escape_javascript production.title %>')">删除</a> &nbsp; 
           </td> 
       </tr>
       <% end %>
@@ -42,4 +45,29 @@
     </div>
   </div>
   
+  <script>
+    var destroy_production = function(id,title){
+      if(!confirm("确认要删除产品（"+title+"）吗？\n删除后将无法恢复，请谨慎操作"))return;
+      $.ajax({
+          type: "POST",
+          url: "/admin/destroy_production",
+          data: {id: id},
+          dataType: "json",
+          success: function (data) {
+            if(data.res){
+              window.location.reload();
+            }else{
+              if(data.msg){
+                alert(data.msg);
+              }
+            }
+          },
+          error: function (msg) {
+            alert("抱歉，操作失败！");
+          }
+      });
+
+    }
+  </script>
+
 </article>

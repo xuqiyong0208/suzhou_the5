@@ -14,10 +14,6 @@ class StyleController < ApplicationController
 
     set_categories
 
-    # @categories.each do |category|
-    #   p category
-    # end
-
     halt_page(:index_page)
   end
 
@@ -26,9 +22,17 @@ class StyleController < ApplicationController
 
     set_categories
 
+    hot = HotProduction.first
+    if hot
+      ids = hot.ids.to_s.split(",")
+    else
+      ids = []
+    end
+
+    @productions = Category.where(id: ids).reverse_order(:id).all
+
   	halt_page(:production_page)
   end
-
 
   def single_production_page
 
@@ -36,13 +40,19 @@ class StyleController < ApplicationController
 
     halt_404 if @category.nil?
 
-    halt_404 if @category.father.nil? and @categories[@category.name]
+    _single_category_page if @categories[@category.id].present?
 
     record = CategoryDescription.where(category_id: @category.id).first
-    @content = record && record.content
-    @content = "<a href='/admin/category/#{CGI.escape(@category.name)}'>还未填写产品介绍, 点击此处去后台填写</a>" if @content.blank?
-
+    @content = (record && record.content).to_s
+    
   	halt_page(:single_production_page)
+  end
+
+  def _single_category_page
+
+    @productions = @categories[@category.id]
+
+    halt_page(:_single_category_page)
   end
 
   def about_page
@@ -55,23 +65,6 @@ class StyleController < ApplicationController
 
     @contact = Contact.first
   	halt_page(:contact_page)
-  end
-
-  private
-
-  def set_categories(name=nil)
-    categories = Category.all
-    @category = nil
-    @categories = {root: []}
-    categories.each do |category|
-      father = category.father
-      if father.present?
-        (@categories[father] ||= []) << category
-      else
-        @categories[:root] << category
-      end
-      @category = category if name && name == category.name
-    end
   end
 
 end

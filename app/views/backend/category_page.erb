@@ -1,8 +1,11 @@
-<%= erb :_breadcrumbs,locals: {breadcrumbs: {"主分类管理"=>"javascript:;"}} %>
+<%= erb :_breadcrumbs,locals: {breadcrumbs: {"分类管理"=>"javascript:;"}} %>
 
 <article class="module width_full">
-  <header>
-    <h3 class="tabs_involved">主分类管理</h3>
+  <header style="position:relative;">
+    <h3 class="tabs_involved">分类管理</h3>
+    <span style="display: inline-block;position: absolute;right: 15px;top: 5px;">
+      <input type="submit" value="创建新分类" class="alt_btn" onclick="window.location.href='/admin/new_category';">
+    </span>
   </header>
   
   <div class="tab_container">
@@ -21,14 +24,16 @@
           <td><%~ category.title %></td>
           <td>
             <p style="display:inline-block;height:30px;">
-              <img height="30px" src="/assets/images/pro-01.jpg" alt="">
+              <% if category.logo_path.url %>
+              <img height="30px" onerror="this.style.display='none';" src="<%~ category.logo_path.url %>" alt="">
+              <% end %>
             </p>
           </td> 
           <td>
-            <a href="/production/<%~ category.name %>" target="_blank">预览</a> &nbsp; 
             <a href="/admin/edit_category/<%~ category.id %>">修改信息</a> &nbsp; 
             <a href="/admin/edit_category_logo/<%~ category.id %>">更新图标</a> &nbsp; 
-            <a href="javascript:destroy_category(<%~ category.id %>)">删除</a> &nbsp; 
+            <a href="/production/<%~ category.name %>" target="_blank">打开网页查看</a> &nbsp; 
+            <a href="javascript:destroy_category(<%~ category.id %>,'<%= escape_javascript category.title %>')">删除</a> &nbsp; 
           </td> 
       </tr>
       <% end %>
@@ -37,4 +42,29 @@
     </div>
   </div>
   
+  <script>
+    var destroy_category = function(id,title){
+      if(!confirm("确认要删除分类（"+title+"）吗？\n删除后将无法恢复，请谨慎操作"))return;
+      $.ajax({
+          type: "POST",
+          url: "/admin/destroy_category",
+          data: {id: id},
+          dataType: "json",
+          success: function (data) {
+            if(data.res){
+              window.location.reload();
+            }else{
+              if(data.msg){
+                alert(data.msg);
+              }
+            }
+          },
+          error: function (msg) {
+            alert("抱歉，操作失败！");
+          }
+      });
+
+    }
+  </script>
+
 </article>

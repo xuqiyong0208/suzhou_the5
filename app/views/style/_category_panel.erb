@@ -7,11 +7,10 @@
         <% categories[:root].each do |category| %>
         <div class="ln_item">
           <i><% if category.logo_path.url %><img onerror="this.style='display:none;'" src="<%~ category.logo_path.url %>" /><% end %></i>
-            <% link = categories[category.name].present? ? "javascript:;" : "/production/#{category.name}" %>
-            <h2><a href="<%~ link %>"><%~ category.title %></a></h2>
-            <% if categories[category.name].present? %>
+            <h2><a href="<%~ "/production/#{category.name}" %>"><%~ category.title %></a></h2>
+            <% if categories[category.id].present? %>
             <div class="s_menu">
-              <% categories[category.name].each do |sub_category| %>
+              <% categories[category.id].each do |sub_category| %>
               <a href="<%~ "/production/#{sub_category.name}" %>"><%~ sub_category.title %></a>
               <% end %>
             </div>

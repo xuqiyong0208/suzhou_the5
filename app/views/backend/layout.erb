@@ -64,7 +64,6 @@
   <section id="secondary_bar">
     <div class="user">
       <p><%~ @admin.username %> (<a href="/admin/logout">退出</a>)</p>
-      <!-- <a class="logout_user" href="#" title="Logout">Logout</a> -->
     </div>
     <div class="breadcrumbs_container">
       <%= content_for?(:breadcrumbs).confirm && yield_content(:breadcrumbs) %>
@@ -76,7 +75,7 @@
     <h3>网站内容管理</h3>
     <ul class="toggle">
       <li class="icn_edit_article"><a href="/admin/production">产品管理</a></li>
-      <li class="icn_edit_article"><a href="/admin/category">主分类管理</a></li>
+      <li class="icn_edit_article"><a href="/admin/category">分类管理</a></li>
       <li class="icn_edit_article"><a href="/admin/intro">修改公司简介</a></li>
       <li class="icn_edit_article"><a href="/admin/contact">修改联系方式</a></li>
     </ul>

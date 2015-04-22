@@ -40,7 +40,7 @@ class ApplicationController < Sinarey::Application
 
   #资源不存在
   def halt_404(msg='')
-    halt 500, erb(:page_404)
+    halt 404, erb(:page_404)
   end
 
   #操作失败
@@ -98,6 +98,44 @@ class ApplicationController < Sinarey::Application
 
   def set_no_cache_header
     response["Cache-Control"] = "no-store"
+  end
+
+  def get_production_by_id(id)
+    return if id.to_i <= 0
+    production = Category.where(id: params[:id].to_i).first
+    return if production.nil?
+
+    sub_category_size = Category.where(father: production.id).count
+    return if sub_category_size > 0
+
+    production
+  end
+
+  def get_category_by_id(id)
+    return if id.to_i <= 0
+    category = Category.where(id: params[:id].to_i, father: nil).first
+    return if category.nil?
+
+    category
+  end
+
+  def get_all_categories
+    Category.reverse_order(:id).all
+  end
+
+  def set_categories(name=nil)
+    categories = get_all_categories
+    @category = nil
+    @categories = {root: []}
+    categories.each do |category|
+      father = category.father
+      if father.present?
+        (@categories[father] ||= []) << category
+      else
+        @categories[:root] << category
+      end
+      @category = category if name && name == category.name
+    end
   end
 
 end

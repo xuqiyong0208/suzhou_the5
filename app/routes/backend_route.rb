@@ -17,7 +17,15 @@ class BackendRoute < BackendController
 
   route :post,  '/admin/contact'        do dispatch(:do_update_contact) end
 
+  route :get,   '/admin/hot_production' do dispatch(:hot_production_page) end
+
+  route :post,  '/admin/hot_production' do dispatch(:update_hot_production) end
+
   route :get,   '/admin/production'       do dispatch(:production_page) end
+
+  route :get,   '/admin/new_production'   do dispatch(:new_production_page) end
+
+  route :post,  '/admin/create_production' do dispatch(:do_create_production) end
 
   route :get,   '/admin/edit_production/:id' do dispatch(:edit_production_page) end
 
@@ -27,7 +35,15 @@ class BackendRoute < BackendController
 
   route :post,  '/admin/update_production_cover' do dispatch(:do_update_production_cover) end
 
+  route :post,  '/admin/do_destroy_production' do dispatch(:do_destroy_production) end
+
+
+
   route :get,   '/admin/category'       do dispatch(:category_page) end
+
+  route :get,   '/admin/new_category'       do dispatch(:new_category_page) end
+
+  route :post,   '/admin/create_category'       do dispatch(:do_create_category) end
 
   route :get,   '/admin/edit_category/:id'   do dispatch(:edit_category_page) end
 
@@ -36,6 +52,8 @@ class BackendRoute < BackendController
   route :get,   '/admin/edit_category_logo/:id' do dispatch(:edit_category_logo_page) end
 
   route :post,  '/admin/update_category_logo' do dispatch(:do_update_category_logo) end
+
+  route :post,  '/admin/destroy_category' do dispatch(:do_destroy_category) end
 
 
 

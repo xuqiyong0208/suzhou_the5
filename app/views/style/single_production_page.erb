@@ -24,8 +24,12 @@
     	<div class="proBox">
         	<h1><%~ @category.title %></h1>
             <div class="proBox_con">
-        	   <div class="proBox_img"><img src="<%~ static_url("images/pro-01.jpg") %>" /></div>
-                <%= sanitize_content @content.to_s %>
+              <% if @category.cover_path.url.present? %>
+        	    <div class="proBox_img">
+                <img src="<%~ @category.cover_path.url %>" />
+              </div>
+              <% end %>
+              <%= sanitize_content @content.to_s %>
             </div>
         </div>
     </div>

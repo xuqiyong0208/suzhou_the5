@@ -1,20 +1,20 @@
-<%= erb :_breadcrumbs,locals: {breadcrumbs: {"产品管理"=>"/admin/production","修改#{@production.title}产品图片"=>"javascript:;"}} %>
+<%= erb :_breadcrumbs,locals: {breadcrumbs: {"分类管理"=>"/admin/category","修改#{@category.title}分类图片"=>"javascript:;"}} %>
 
 <article class="module width_full">
-  <header><h3>修改产品图片 | <%~ @production.title %></h3></header>
+  <header><h3>修改分类图片 | <%~ @category.title %></h3></header>
 
   <div class="module_content">
   
-    <form id="page_form" action="/admin/update_production_cover" method="post" enctype="multipart/form-data">
+    <form id="page_form" action="/admin/update_category_logo" method="post" enctype="multipart/form-data">
 
-      <input type="hidden" name="id" value="<%~ @production.id %>">
+      <input type="hidden" name="id" value="<%~ @category.id %>">
 
 
-      <% if @production.cover_path.url %>
+      <% if @category.logo_path.url %>
       <fieldset>
         <div style="height:25px;"><label>当前图片</label></div>
         <div>
-          <img src="<%~ @production.cover_path.url %>" alt="">
+          <img src="<%~ @category.logo_path.url %>" alt="">
         </div>
       </fieldset>
       <% end %>
@@ -22,7 +22,7 @@
       <fieldset>
         <div style="height:25px;"><label>上传新图片</label></div>
         <div style="padding-left:8px;">
-          <input type="file" name="cover_path">
+          <input type="file" name="logo_path">
         </div>
       </fieldset>
 
@@ -42,7 +42,7 @@
   <footer>
     <div class="submit_link">
       <input type="submit" value="保存" class="alt_btn" onclick="do_submit_form();">&nbsp;
-      <input type="submit" value="返回" onclick="window.location.href='/admin/production';">&nbsp;
+      <input type="submit" value="返回" onclick="window.location.href='/admin/category';">&nbsp;
     </div>
 </footer>
 </article>

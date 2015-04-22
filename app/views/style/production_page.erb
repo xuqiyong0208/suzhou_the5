@@ -24,60 +24,17 @@
     	<div class="hotPro">
         	<h1>热销产品</h1>
         	<ul>
-            	<li>
-                	<a href="#">
-                        <div class="hp_img"><img src="<%~ static_url("images/pro-01.jpg") %>" /></div>
-                        <div class="hp_text">
-                        	<h3>鲜橙</h3>
-                            <p>常吃可以防癌: 一个中等大小的橙子可以提供人一天所需的维生素C,提高身体抵挡细菌侵害的能力。</p>
-                        </div>
-                    </a>
-                </li>
+                <% @productions.each do |production| %>
                 <li>
-                	<a href="#">
-                        <div class="hp_img"><img src="<%~ static_url("images/pro-01.jpg") %>" /></div>
+                    <a href="<%~ "/production/#{production.name}" %>">
+                        <div class="hp_img"><img src="<%~ production.cover_path.url %>" /></div>
                         <div class="hp_text">
-                        	<h3>鲜橙</h3>
-                            <p>常吃可以防癌: 一个中等大小的橙子可以提供人一天所需的维生素C,提高身体抵挡细菌侵害的能力。</p>
+                            <h3><%~ production.title %></h3>
+                            <p><%~ production.intro.to_s.truncate(50) %></p>
                         </div>
                     </a>
                 </li>
-                <li>
-                	<a href="#">
-                        <div class="hp_img"><img src="<%~ static_url("images/pro-01.jpg") %>" /></div>
-                        <div class="hp_text">
-                        	<h3>鲜橙</h3>
-                            <p>常吃可以防癌: 一个中等大小的橙子可以提供人一天所需的维生素C,提高身体抵挡细菌侵害的能力。</p>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                	<a href="#">
-                        <div class="hp_img"><img src="<%~ static_url("images/pro-01.jpg") %>" /></div>
-                        <div class="hp_text">
-                        	<h3>鲜橙</h3>
-                            <p>常吃可以防癌: 一个中等大小的橙子可以提供人一天所需的维生素C,提高身体抵挡细菌侵害的能力。</p>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                	<a href="#">
-                        <div class="hp_img"><img src="<%~ static_url("images/pro-01.jpg") %>" /></div>
-                        <div class="hp_text">
-                        	<h3>鲜橙</h3>
-                            <p>常吃可以防癌: 一个中等大小的橙子可以提供人一天所需的维生素C,提高身体抵挡细菌侵害的能力。</p>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                	<a href="#">
-                        <div class="hp_img"><img src="<%~ static_url("images/pro-01.jpg") %>" /></div>
-                        <div class="hp_text">
-                        	<h3>鲜橙</h3>
-                            <p>常吃可以防癌: 一个中等大小的橙子可以提供人一天所需的维生素C,提高身体抵挡细菌侵害的能力。</p>
-                        </div>
-                    </a>
-                </li>
+                <% end %>
             </ul>
         </div>
     </div>

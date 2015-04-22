@@ -3,7 +3,7 @@ class Category < Sequel::Model
 
 	set_dataset :tb_category
 
-	set_allowed_columns :title, :name, :father,
+	set_allowed_columns :title, :name, :father, :intro,
 
                       :logo_path, :logo_path_cache, :remove_logo_path,
                       :cover_path, :cover_path_cache, :remove_cover_path

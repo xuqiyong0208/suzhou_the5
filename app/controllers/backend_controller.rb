@@ -90,99 +90,241 @@ class BackendController < ApplicationController
     halt_json(res: true)
   end
 
-  #分类管理页面
-  def production_page
-    @categories = Category.all
+  #配置热销产品表单页
+  def hot_production_page
 
-    @dict = {}
-    @children_exist = {}
-    @categories.each do |category|
-      @dict[category.name] = category.title
+    all_categories = get_all_categories
+
+    @category_dict = {}
+    @productions = {}
+    @pids = {}
+
+    children_exist = {}
+    all_categories.each do |category|
       father = category.father
       if father.present?
-        @children_exist[father] ||= true
+        children_exist[father] ||= true
+      else
+        @category_dict[category.id] ||= category.title
       end
+    end
+
+    all_categories.each do |category|
+      next if category.father.nil? and children_exist[category.id]
+      @productions[category.id] = category
+    end
+
+    hot = HotProduction.first
+    if hot
+      ids = hot.ids.to_s.split(",")
+      ids.each do |num|
+        next if num.blank?
+        num = num.to_i
+        @pids[num] = num
+      end
+    end
+
+    halt_page(:hot_production_page)
+  end
+
+  #更新热销产品
+  def update_hot_production
+
+    ids_arr = Array.wrap(params[:ids])
+    ids_str = ids_arr.join(",")
+
+    hot = HotProduction.first
+    if hot
+      hot.update(ids: ids_str)
+    else
+      HotProduction.create(ids: ids_str)
+    end
+
+    halt_json(res: true)
+  end
+
+  #产品管理页面
+  def production_page
+    all_categories = get_all_categories
+
+    @category_dict = {}
+    @productions = []
+
+    children_exist = {}
+    all_categories.each do |category|
+      father = category.father
+      if father.present?
+        children_exist[father] ||= true
+      else
+        @category_dict[category.id] ||= category.title
+      end
+    end
+
+    all_categories.each do |category|
+      next if category.father.nil? and children_exist[category.id]
+      @productions << category
     end
 
     halt_page(:production_page)
   end
 
-  #编辑产品信息页
-  def edit_production_page
+  #新建产品表单页
+  def new_production_page
 
-    @category = Category.where(id: params[:id].to_i).first
+    @categories = Category.where(father: nil).all
 
-    record = CategoryDescription.where(category_id: @category.id).first
-    @content = record && record.content
-
-    halt_page(:edit_production_page)
+    halt_page(:new_production_page)
   end
 
-  #修改产品信息
-  def do_update_production
+  #创建产品
+  def do_create_production
 
-    category = Category.where(id: params[:id].to_i).first
-    halt_json(res:false, msg: "指定产品不存在") if category.nil?
-
-    name, title = params[:name].to_s, params[:title].to_s
+    name, title, intro = params[:name].to_s, params[:title].to_s, params[:intro].to_s
     halt_json(res:false, msg: "请输入产品ID") if name.blank?
 
     halt_json(res:false, msg: "产品ID格式不正确，仅支持英文字母、数字以及下划线") if !name_regex_match?(name)
 
     halt_json(res:false, msg: "请输入产品名称") if title.blank?
 
-    category.name = name
-    category.title = title
-    category.save
+    father = (tmp=params[:father].to_i)>0 ? tmp : nil
+
+    production = Category.new
+    production.name = name
+    production.title = title
+    production.intro = intro[0,191]
+    production.father = father
+    production.save
 
     content = params[:content].to_s
-    record = CategoryDescription.where(category_id: category.id).first
-    if record
-      record.update(content:content)
+    description = CategoryDescription.where(category_id: production.id).first
+    if description
+      description.update(content:content)
     else
-      CategoryDescription.create(content:content, category_id: category.name)
+      CategoryDescription.create(content:content, category_id: production.id)
+    end
+
+    halt_json(res:true)
+  end
+
+  #编辑产品信息表单页
+  def edit_production_page
+
+    @production = get_production_by_id(params[:id])
+    halt_404 if @production.nil?
+
+    record = CategoryDescription.where(category_id: @production.id).first
+    @content = record && record.content
+
+    @categories = Category.where(father: nil).all
+
+    halt_page(:edit_production_page)
+  end
+
+  #更新产品信息
+  def do_update_production
+
+    production = get_production_by_id(params[:id])
+    halt_json(res:false, msg: "指定产品不存在") if production.nil?
+
+    name, title, intro = params[:name].to_s, params[:title].to_s, params[:intro].to_s
+    halt_json(res:false, msg: "请输入产品ID") if name.blank?
+
+    halt_json(res:false, msg: "产品ID格式不正确，仅支持英文字母、数字以及下划线") if !name_regex_match?(name)
+
+    halt_json(res:false, msg: "请输入产品名称") if title.blank?
+
+    father = (tmp=params[:father].to_i)>0 ? tmp : nil
+
+    production.name = name
+    production.title = title
+    production.intro = intro[0,191]
+    production.father = father
+    production.save
+
+    content = params[:content].to_s
+    description = CategoryDescription.where(category_id: production.id).first
+    if description
+      description.update(content:content)
+    else
+      CategoryDescription.create(content:content, category_id: production.id)
     end
     halt_json(res:true)
   end
 
-  #编辑产品信息页
+  #编辑产品图片表单页
   def edit_production_cover_page
 
-    @category = Category.where(id: params[:id].to_i).first
+    @production = get_production_by_id(params[:id])
+    halt_404 if @production.nil?
 
     halt_page(:edit_production_cover_page)
   end
 
   #更新产品图片
   def do_update_production_cover
-    @category = Category.where(id: params[:id].to_i).first
-    if @category
+    @production = get_production_by_id(params[:id])
+    if @production
       cover_path = params[:cover_path]
       if cover_path and cover_path.class == Hash
-        @category.cover_path = cover_path
-        p cover_path
-        @category.save
+        @production.cover_path = cover_path
+        @production.save
       end
     end
     redirect_to request.referer || "/admin"
   end
 
-  # 主分类管理页
+  #删除产品
+  def do_destroy_production
+
+    @production = get_production_by_id(params[:id])
+    @production.destroy if @production
+    halt_json(res:true)
+  end
+
+
+
+  #分类管理页
   def category_page
 
-    @categories = Category.where(father:nil).all
+    @categories = Category.where(father:nil).reverse_order(:id).all
 
     halt_page(:category_page)
   end
 
-  #编辑主分类信息页
+  #新建分类页表单
+  def new_category_page
+
+    halt_page(:new_category_page)
+  end
+
+  #创建分类
+  def do_create_category
+
+    name, title = params[:name].to_s, params[:title].to_s
+    halt_json(res:false, msg: "请输入主分类ID") if name.blank?
+
+    halt_json(res:false, msg: "主分类ID格式不正确，仅支持英文字母、数字以及下划线") if !name_regex_match?(name)
+
+    halt_json(res:false, msg: "请输入主分类名称") if title.blank?
+
+    category = Category.new
+    category.name = name
+    category.title = title
+    category.save
+
+    halt_json(res:true)
+  end
+
+  #编辑分类信息表单页
   def edit_category_page
 
-    @category = Category.where(id: params[:id].to_i).first
+    @category = get_category_by_id(params[:id])
+    halt_404 if @category.nil?
 
     halt_page(:edit_category_page)
   end
 
+  #更新分类信息
   def do_update_category
 
     category = Category.where(id: params[:id].to_i).first
@@ -199,23 +341,38 @@ class BackendController < ApplicationController
     category.title = title
     category.save
 
-    content = params[:content].to_s
-    record = CategoryDescription.where(category_id: category.id).first
-    if record
-      record.update(content:content)
-    else
-      CategoryDescription.create(content:content, category_id: category.name)
-    end
+    halt_json(res:true)
+  end
+
+  #删除分类
+  def do_destroy_category
+
+    @category = get_category_by_id(params[:id])
+    @category.destroy if @category
     halt_json(res:true)
   end
 
 
   def edit_category_logo_page
-    "edit_category_logo_page called"
+
+    @category = get_category_by_id(params[:id])
+    halt_404 if @category.nil?
+
+    halt_page(:edit_category_logo_page)
   end
 
   def do_update_category_logo
-    "do_update_category_logo called"
+
+    @category = get_category_by_id(params[:id])
+    if @category
+      logo_path = params[:logo_path]
+      if logo_path and logo_path.class == Hash
+        @category.logo_path = logo_path
+        @category.save
+      end
+    end
+
+    redirect_to request.referer || "/admin"
   end
 
   # 登录页

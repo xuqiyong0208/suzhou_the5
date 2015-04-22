@@ -1,31 +1,29 @@
-<%= erb :_breadcrumbs,locals: {breadcrumbs: {"分类管理"=>"/admin/category","修改#{@category.title}分类信息"=>"javascript:;"}} %>
+<%= erb :_breadcrumbs,locals: {breadcrumbs: {"分类管理"=>"/admin/category","创建新分类"=>"javascript:;"}} %>
 
 <article class="module width_full">
-  <header><h3>修改主分类信息 | <%~ @category.title %></h3></header>
+  <header><h3>创建新分类</h3></header>
 
   <div class="module_content">
   
     <form id="edit_category_page_form">
 
-      <input type="hidden" name="id" value="<%~ @category.id %>">
-
       <fieldset>
         <label>分类名称</label>
-        <input type="text" name="title" value="<%~ @category.title %>">
+        <input type="text" name="title" value="">
       </fieldset>
 
       <fieldset>
         <label style="width:300px;">分类ID</label>
-        <input type="text" name="name" value="<%~ @category.name %>">
+        <input type="text" name="name" value="">
       </fieldset>
 
       <script type="text/javascript">
 
-        var update_category = function(){
+        var create_category = function(){
           var $form = $("#edit_category_page_form");
           $.ajax({
               type: "POST",
-              url: "/admin/update_category",
+              url: "/admin/create_category",
               data: $form.serialize(),
               dataType: "json",
               success: function (data) {
@@ -49,7 +47,7 @@
   </div>
   <footer>
     <div class="submit_link">
-      <input type="submit" value="保存" class="alt_btn" onclick="update_category();">&nbsp;
+      <input type="submit" value="保存" class="alt_btn" onclick="create_category();">&nbsp;
     </div>
 </footer>
 </article>

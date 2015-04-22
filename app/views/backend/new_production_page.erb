@@ -1,4 +1,4 @@
-<%= erb :_breadcrumbs,locals: {breadcrumbs: {"产品管理"=>"/admin/production","修改#{@production.title}产品信息"=>"javascript:;"}} %>
+<%= erb :_breadcrumbs,locals: {breadcrumbs: {"产品管理"=>"/admin/production","创建新产品"=>"javascript:;"}} %>
 
 
 <% content_for(:head) do %>
@@ -8,31 +8,28 @@
 <% end %>
 
 <article class="module width_full">
-  <header><h3>修改产品信息 | <%~ @production.title %></h3></header>
+  <header><h3>创建新产品</h3></header>
 
   <div class="module_content">
   
-    <form id="edit_production_page_form">
-
-      <input type="hidden" name="id" value="<%~ @production.id %>">
+    <form id="new_production_page_form">
 
       <fieldset>
         <label>产品名称</label>
-        <input type="text" name="title" value="<%~ @production.title %>">
+        <input type="text" name="title" value="">
       </fieldset>
 
       <fieldset>
         <label style="width:300px;">产品ID</label>
-        <input type="text" name="name" value="<%~ @production.name %>">
+        <input type="text" name="name" value="">
       </fieldset>
 
       <fieldset>
         <div style="height:25px;"><label>产品分类</label></div>
         <select name="father">
-          <option value="">主分类</option>
+          <option value="" selected>主分类</option>
           <% @categories.each do |category| %>
-          <% next if @production.id == category.id %>
-          <option value="<%~ category.id %>" <%= "selected" if @production.father==category.id %>><%~ category.title %></option>
+          <option value="<%~ category.id %>"><%~ category.title %></option>
           <% end %>
         </select>
       </fieldset>
@@ -41,8 +38,8 @@
         <div style="height:25px;"><label>产品介绍</label></div>
         <div>
           <script type="text/plain" id="myEditor"></script>
-          <input type="hidden" name="content" value="<%~ @ccontent %>">
-          <input type="hidden" name="intro" value="<%~ @production.intro %>">
+          <input type="hidden" name="content" value="">
+          <input type="hidden" name="intro" value="">
         </div>
       </fieldset>
 
@@ -57,22 +54,21 @@
         });
 
         window.editor.ready(function() {
-          window.editor.setContent("<%= escape_javascript @content.to_s %>");
+          //nothing
         });
 
 
-        var update_production = function(){
-
+        var create_production = function(){
           var content = window.editor.getContent(),
               intro = window.editor.getContentTxt(),
-              $form = $("#edit_production_page_form");
+              $form = $("#new_production_page_form");
 
           $form.find("[name=content]").val(content);
           $form.find("[name=intro]").val(intro);
 
           $.ajax({
               type: "POST",
-              url: "/admin/update_production",
+              url: "/admin/create_production",
               data: $form.serialize(),
               dataType: "json",
               success: function (data) {
@@ -99,7 +95,7 @@
   </div>
   <footer>
     <div class="submit_link">
-      <input type="submit" value="保存" class="alt_btn" onclick="update_production();">&nbsp;
+      <input type="submit" value="保存" class="alt_btn" onclick="create_production();">&nbsp;
     </div>
 </footer>
 </article>
