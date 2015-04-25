@@ -9,11 +9,10 @@
 
       <input type="hidden" name="id" value="<%~ @category.id %>">
 
-
       <% if @category.logo_path.url %>
       <fieldset>
         <div style="height:25px;"><label>当前图片</label></div>
-        <div>
+        <div style="padding-left:10px;">
           <img src="<%~ @category.logo_path.url %>" alt="">
         </div>
       </fieldset>

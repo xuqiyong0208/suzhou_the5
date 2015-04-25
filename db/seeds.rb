@@ -3,7 +3,7 @@ require File.expand_path('../config/application', __dir__)
 
 #管理员
 begin
-  Admin.create(email:"qing_cai@jkshklgz.com", username:"qing_cai", password: "watforever932706")
+  Admin.create(email:"qing_cai@jkshklgz.com", username:"qing_cai", password: "9876054321", is_root: true)
 rescue Exception => boom
   puts "admin rescue... #{boom.class}-#{boom.message}"
   puts "-------------------------------------------------------\n\n"
@@ -57,7 +57,7 @@ rescue Exception => boom
 end
 
 #公司介绍
-if !Intro.first
+if !Meta.where(name: 'intro', page: 1).first
 
   intro_content = %q{<p>这里是公司介绍的正文。</p>
 <p>可以在在后台管理系统修改此处的文本内容</p>
@@ -74,12 +74,12 @@ if !Intro.first
 <p>公司介绍正文结束</p>
 }
 
-  Intro.create(content:intro_content)
+  Meta.create(content:intro_content,name: 'intro')
 end
 
 
 #联系我们
-if !Contact.first
+if !Meta.where(name: 'contact', page: 1).first
 
   contact_content = %q{<p>这里填写"联系我们"的正文。</p>
 <p>可以在在后台管理系统修改此处的文本内容</p>
@@ -101,7 +101,7 @@ if !Contact.first
 <p>联系我们正文结束</p>
 }
 
-  Contact.create(content:contact_content)
+  Meta.create(content:contact_content,name: 'contact')
 end
 
 puts "finish"

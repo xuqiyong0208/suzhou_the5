@@ -163,9 +163,15 @@ button, input, select, textarea {
           <input type="password" name="password" id="user_pass" class="input" value="" size="20"></label>
         </p>
           
+        <% if flash[:notice].blank? %>
         <div id="login_error" class="hidden">
           <strong>错误</strong>：<span id="login_error_msgbox"></span><br>
         </div>
+        <% else %>
+        <div id="login_error">
+          <strong>错误</strong>：<span id="login_error_msgbox"><%~ flash[:notice] %></span><br>
+        </div>
+        <% end %>
 
         <p class="submit">
           <input type="submit" onclick="do_login(this);return false;" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="登录">

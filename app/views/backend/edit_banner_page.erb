@@ -1,0 +1,63 @@
+<% production_title = (@production&&@production.title).to_s %>
+<%= erb :_breadcrumbs,locals: {breadcrumbs: {"产品海报管理"=>"/admin/banner","修改#{production_title}产品海报"=>"javascript:;"}} %>
+
+<article class="module width_full">
+  <header><h3>修改<%~ production_title %>产品海报</h3></header>
+
+  <div class="module_content">
+  
+    <form id="edit_banner_form" action="/admin/update_banner" method="post" enctype="multipart/form-data">
+      
+      <input type="hidden" name="id" value="<%~ @banner.id %>">
+
+      <% if @banner.cover_path.url %>
+      <fieldset class="overflow-x">
+        <div style="height:25px;"><label>当前海报</label></div>
+        <div style="padding-left:10px;">
+          <img src="<%~ @banner.cover_path.url %>" alt="">
+        </div>
+      </fieldset>
+      <% end %>
+
+      <fieldset>
+        <div style="height:25px;"><label>上传新海报</label></div>
+        <div style="padding-left:8px;">
+          <input type="file" name="cover_path">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <div style="height:25px;"><label>当前海报所对应的产品</label></div>
+        <select name="production_id">
+          <option value="">---请选择---</option>
+          <% @productions.each do |production| %>
+          <option value="<%~ production.id %>" <%= "selected" if production.id==@production.id %>><%~ production.title %></option>
+          <% end %>
+        </select>
+      </fieldset>
+
+    </form>
+
+  </div>
+  <footer>
+    <div class="submit_link">
+      <input type="submit" value="保存" class="alt_btn" onclick="update_banner();">&nbsp;
+      <input type="submit" value="返回" onclick="window.location.href='/admin/banner';">&nbsp;
+    </div>
+</footer>
+</article>
+
+<script>
+  var update_banner = function(){
+    var $form = $("#edit_banner_form"),
+        production_id = $form.find('[name=production_id]').val(),
+        cover_path = $form.find('[name=cover_path]').val();
+
+    if(!production_id){
+      alert('请先选择产品');
+      return
+    };
+
+    $form.submit();
+  }
+</script>

@@ -4,7 +4,7 @@ class Admin < Sequel::Model
 
   set_dataset :tb_admin
 
-  set_allowed_columns :username, :email, :password
+  set_allowed_columns :username, :email, :password, :is_root
 
 
   class << self

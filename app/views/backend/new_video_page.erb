@@ -1,0 +1,58 @@
+<%= erb :_breadcrumbs,locals: {breadcrumbs: {"网站视频"=>"/admin/video","创建新视频"=>"javascript:;"}} %>
+
+<article class="module width_full">
+  <header><h3>创建新视频</h3></header>
+
+  <div class="module_content">
+  
+    <form id="new_video_form" action="/admin/create_video" method="post" enctype="multipart/form-data">
+
+
+      <fieldset>
+        <div style="height:25px;"><label>视频标题</label></div>
+        <div>
+          <input type="text" name="title" value="">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <div style="height:25px;"><label>上传视频</label></div>
+        <div style="padding-left:8px;">
+          <input type="file" name="video_path">
+        </div>
+        <div style="padding:8px;">
+          注意：<font style="color:red;">只支持MP4格式文件</font>。同时<font style="color:red;">单个视频大小限制在200M以内</font>。<br>
+          视频文件一般较大，受网络带宽的影响，上传时间会比较长，请耐心等待。<br>
+          由于服务器的硬盘容量有限，请确保<font style="color:red;">所有上传的视频合计大小不要超过5G。</font>
+        </div>
+      </fieldset>
+
+    </form>
+
+  </div>
+  <footer>
+    <div class="submit_link">
+      <input type="submit" value="保存" class="alt_btn" onclick="create_video();">&nbsp;
+    </div>
+</footer>
+</article>
+
+<script>
+  var create_video = function(){
+    var $form = $("#new_video_form"),
+        title = $form.find('[name=title]').val(),
+        video_path = $form.find('[name=video_path]').val();
+
+    if(!title){
+      alert('请先输入标题');
+      return
+    };
+
+    if(!video_path){
+      alert('请上传视频文件');
+      return
+    };
+
+    $form.submit();
+  }
+</script>

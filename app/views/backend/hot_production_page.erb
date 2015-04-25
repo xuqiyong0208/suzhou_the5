@@ -3,89 +3,168 @@
 <article class="module width_full">
   <header><h3>配置热销产品</h3></header>
 
-  <form id="page_form">
+  <article class="module width_half">
+    <header>
+      <h3 class="tabs_involved">选择产品添加到热销商品</h3>
+    </header>
 
-    <article class="module width_3_quarter">
-      <header>
-        <h3 class="tabs_involved">选择产品</h3>
-      </header>
+    <table class="tablesorter" cellspacing="0"> 
+      <thead> 
+        <tr> 
+            <th class="header">产品名称</th>  
+            <th class="header">产品图片</th> 
+            <th class="header"></th> 
+        </tr> 
+      </thead> 
+      <tbody>
+        <% @productions.each_value do |production| %>
+        <% next if @pids[production.id] %>
+        <tr> 
+            <td><%~ production.title %></td> 
+            <td style="padding:0;">
+              <p style="display:inline-block;height:30px;margin: 0;">
+                <% if production.cover_path.url %>
+                <img height="30px" onerror="this.style.display='none';" src="<%~ production.cover_path.url %>" alt="">
+                <% end %>
+              </p>
+            </td> 
+            <td>&nbsp;&nbsp;<a href="javascript:add_hot_production(<%~ production.id %>);">添加到热销产品列表</a>&nbsp;&nbsp;</td> 
+        </tr>
+        <% end %>
+      </tbody> 
+    </table>
+  </article>
 
-      <table class="tablesorter" cellspacing="0"> 
-        <thead> 
-          <tr> 
-              <th class="header"></th> 
-              <th class="header">产品图片</th> 
-              <th class="header">产品名称</th> 
-              <th class="header">产品分类</th> 
-          </tr> 
-        </thead> 
-        <tbody>
-          <% @productions.each_value do |production| %>
-          <tr> 
-              <td><input type="checkbox" name="ids[]" value="<%~ production.id %>" <%= "checked" if @pids[production.id] %>></td> 
-              <td style="padding:0;">
-                <p style="display:inline-block;height:30px;margin: 0;">
-                  <% if production.cover_path.url %>
-                  <img height="30px" onerror="this.style.display='none';" src="<%~ production.cover_path.url %>" alt="">
-                  <% end %>
-                </p>
-              </td> 
-              <td><%~ production.title %></td> 
-              <td><%~ @category_dict[production.father] || "主分类" %></td> 
-          </tr>
-          <% end %>
-        </tbody> 
-      </table>
-    </article>
-
-    <article class="module width_quarter">
-      <header><h3>当前热销产品</h3></header>
-      <div>
-        <div class="module_content">
+  <article class="module width_half">
+    <header><h3>当前热销产品列表</h3></header>
+    <div>
+      <div class="module_content">
+        <% if @pids.present? %>
+          <% hot_index = 0 %>
           <% @pids.each_value do |id| %>
           <% production = @productions[id] %>
-          <% next if production.nil? %>
           <div class="message" style="padding:5px 0;">
-            <strong><%~ production.title %></strong>
+            <div class="width_one_third" style="display:inline-block;"><strong><%~ production.title %></strong>&nbsp;</div>
+            <div class="width_one_third" style="display:inline-block;">
+              <p style="display:inline-block;height:30px;margin: 0;">
+                <% if production.cover_path.url %>
+                <img height="30px" onerror="this.style.display='none';" src="<%~ production.cover_path.url %>" alt="">
+                <% end %>
+              </div>
+            <div class="width_one_third" style="display:inline-block;"><a href="javascript:remove_hot_production(<%~ production.id %>);">移除</a>&nbsp;<a href="javascript:move_up_hot_production(<%~ hot_index %>);">上移</a>&nbsp;<a href="javascript:move_down_hot_production(<%~ hot_index %>);">下移</a></div>
+            <div class="clear"></div>
           </div>
+          <% hot_index += 1 %>
           <% end %>
-        </div>
+        <% else %>
+          <div class="" style="padding:5px 0;">
+            还未添加任何热销商品，请在左边栏进行添加...
+          </div>
+        <% end %>
       </div>
-    </article>
-
-    <div class="clear"></div>
-
-    <script type="text/javascript">
-
-      var update_hot_production = function(){
-        var $form = $("#page_form");
-        $.ajax({
-            type: "POST",
-            url: "/admin/hot_production",
-            data: $form.serialize(),
-            dataType: "json",
-            success: function (data) {
-              if(data.res){
-                window.location.reload();
-              }else{
-                if(data.msg){
-                  alert(data.msg);
-                }
-              }
-            },
-            error: function (msg) {
-              alert("抱歉，保存失败！");
-            }
-        });
-      }
-    </script>
-
-  </form>
-  <br>
-  <footer>
-    <div class="submit_link">
-      <input type="submit" value="保存" class="alt_btn" onclick="update_hot_production();">&nbsp;
-      <input type="submit" value="返回" onclick="window.location.href='/admin/production';">&nbsp;
     </div>
-  </footer>
+  </article>
+
+  <div class="clear"></div>
+
+  <br>
+  
 </article>
+
+<script type="text/javascript">
+
+  Array.prototype.deleteElementByValue = function(varElement)
+  {
+      var numDeleteIndex = -1;
+      for (var i=0; i<this.length; i++)
+      {
+          if (this[i] == varElement)
+          {
+              this.splice(i, 1);
+              numDeleteIndex = i;
+              break;
+          }
+      }
+      return numDeleteIndex;
+  }
+
+  Array.prototype.swapItems = function(index1, index2) {
+    this[index1] = this.splice(index2, 1, this[index1])[0];
+    console.info("flag1");
+    console.info(this);
+    return this;
+  };
+ 
+    // 上移
+  Array.prototype.upRecord = function($index) {
+    if($index == 0) {
+        return;
+    }
+    this.swapItems($index, $index - 1);
+  };
+ 
+  // 下移
+  Array.prototype.downRecord = function($index) {
+      if($index == this.length -1) {
+          return;
+      }
+      this.swapItems($index, $index + 1);
+  };
+
+  window.pids = <%= @pids.values.to_json %>;
+  window.updating = false;
+
+  window.submit_hot_production = function(){
+    if(window.updating)return;
+    window.updating = true;
+    var $form = $("#page_form");
+    $.ajax({
+        type: "POST",
+        url: "/admin/hot_production",
+        data: {
+          ids: window.pids.join(","),
+        },
+        dataType: "json",
+        success: function (data) {
+          if(data.res){
+            window.submit_hot_production = function(){return false};
+            window.location.reload();
+          }else{
+            if(data.msg){
+              alert(data.msg);
+            }
+            window.updating = false;
+          }
+        },
+        error: function (msg) {
+          alert("抱歉，保存失败！");
+          window.updating = false;
+        }
+    });
+  }
+
+  window.add_hot_production = function(pid){
+    if(window.updating)return;
+    window.pids.unshift(pid);
+    submit_hot_production();
+  }
+
+  window.remove_hot_production = function(pid){
+    if(window.updating)return;
+    window.pids.deleteElementByValue(pid);
+    submit_hot_production();
+  }
+
+  window.move_up_hot_production = function(index){
+    if(window.updating)return;
+    window.pids.upRecord(index);
+    submit_hot_production();
+  }
+
+  window.move_down_hot_production = function(index){
+    if(window.updating)return;
+    window.pids.downRecord(index);
+    submit_hot_production();
+  }
+
+</script>

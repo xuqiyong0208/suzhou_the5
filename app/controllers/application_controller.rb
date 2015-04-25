@@ -49,6 +49,12 @@ class ApplicationController < Sinarey::Application
     halt 500, erb(:page_500)
   end
 
+  #错误提示
+  def halt_error(msg='')
+    @msg = msg.presence || "抱歉，服务器繁忙，请稍后重试"
+    halt 500, erb(:page_error)
+  end
+
   #请求有误
   def halt_412(msg='')
     text = "参数错误。"
@@ -101,8 +107,9 @@ class ApplicationController < Sinarey::Application
   end
 
   def get_production_by_id(id)
+    id = id.to_i
     return if id.to_i <= 0
-    production = Category.where(id: params[:id].to_i).first
+    production = Category.where(id: id).first
     return if production.nil?
 
     sub_category_size = Category.where(father: production.id).count
@@ -112,8 +119,9 @@ class ApplicationController < Sinarey::Application
   end
 
   def get_category_by_id(id)
-    return if id.to_i <= 0
-    category = Category.where(id: params[:id].to_i, father: nil).first
+    id = id.to_i
+    return if id <= 0
+    category = Category.where(id: id, father: nil).first
     return if category.nil?
 
     category
@@ -123,9 +131,43 @@ class ApplicationController < Sinarey::Application
     Category.reverse_order(:id).all
   end
 
-  def set_categories(name=nil)
+  def set_banners(product_dict=nil)
+    bannar_meta = Meta.where(name: 'hot_banner', page: 1).first
+    if bannar_meta
+      banner_ids = bannar_meta.content.to_s.split(",").map(&:to_i)
+    else
+      banner_ids = []
+    end
+
+    banners = Banner.where(id: banner_ids).all
+
+    if !product_dict
+      pids = banners.map(&:production_id).uniq
+      product_dict = {}
+      productions = Category.where(id: pids).all
+      productions.each do |product|
+        product_dict[product.id] = product
+      end
+    end
+
+    banner_dict = {}
+    banners.each do |banner|
+      next if banner.cover_path.url.blank? or (production = product_dict[banner.production_id]).nil?
+      banner_dict[banner.id] = {cover_url: banner.cover_path.url, production_name: production.name}
+    end
+
+    @banners = []
+    banner_ids.each do |banner_id|
+      banner = banner_dict[banner_id]
+      next if banner.nil?
+      @banners << banner
+    end
+  end
+
+  def set_categories_and_banners(name=nil)
     categories = get_all_categories
     @category = nil
+    @category_with_id = {}
     @categories = {root: []}
     categories.each do |category|
       father = category.father
@@ -134,8 +176,10 @@ class ApplicationController < Sinarey::Application
       else
         @categories[:root] << category
       end
+      @category_with_id[category.id] = category
       @category = category if name && name == category.name
     end
+    set_banners(@category_with_id)
   end
 
 end

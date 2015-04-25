@@ -1,0 +1,167 @@
+<%= erb :_breadcrumbs,locals: {breadcrumbs: {"网站视频管理"=>"/admin/video","配置当前视频列表"=>"javascript:;"}} %>
+
+<article class="module width_half">
+  <header style="position:relative;">
+    <h3 class="tabs_involved">选择视频</h3>
+  </header>
+  
+  <div class="tab_container">
+    <div id="tab1" class="tab_content" style="display: block;">
+      <% if @videos_dict.present? %>
+        <table class="tablesorter" cellspacing="0"> 
+        <thead> 
+          <tr> 
+              <th class="header">产品名称</th>
+              <th class="header">产品海报</th>  
+              <th class="header">操作</th> 
+          </tr>
+        </thead> 
+        <tbody> 
+          <% @videos_dict.each do |video_id, video| %>
+          <% 
+            next if @pids[video_id]
+          %>
+
+          <tr>
+              <td><%~ video.title  %></td>
+              <td>
+                <a href="javascript:add_hot_video(<%~ video_id %>);">添加到当前海报列表</a> &nbsp;
+              </td> 
+          </tr>
+          <% end %>
+        </tbody> 
+        </table>
+      <% end %>
+
+    </div>
+  </div>
+
+</article>
+
+<article class="module width_half">
+  <header><h3>当前视频列表</h3></header>
+  <div>
+    <div class="module_content">
+      <% if @pids.present? %>
+        <% hot_index = 0 %>
+        <% @pids.each_value do |video_id| %>
+        <% video = @videos_dict[video_id] %>
+        <div class="message" style="padding:5px 0;">
+          <div class="width_half" style="display:inline-block;"><strong><%~ video.title %></strong>&nbsp;</div>
+          <div class="width_half" style="display:inline-block;">
+            <a href="javascript:remove_hot_video(<%~ video_id %>);">移除</a>&nbsp;
+            <a href="javascript:move_up_hot_video(<%~ hot_index %>);">上移</a>&nbsp;
+            <a href="javascript:move_down_hot_video(<%~ hot_index %>);">下移</a></div>
+          <div class="clear"></div>
+        </div>
+        <% hot_index += 1 %>
+        <% end %>
+      <% else %>
+        <div class="" style="padding:5px 0;">
+          还未添加任何产品海报，请在左边栏进行添加...
+        </div>
+      <% end %>
+
+    </div>
+  </div>
+
+  <br>
+</article>
+
+<script>
+
+  Array.prototype.deleteElementByValue = function(varElement)
+  {
+      var numDeleteIndex = -1;
+      for (var i=0; i<this.length; i++)
+      {
+          if (this[i] == varElement)
+          {
+              this.splice(i, 1);
+              numDeleteIndex = i;
+              break;
+          }
+      }
+      return numDeleteIndex;
+  }
+
+  Array.prototype.swapItems = function(index1, index2) {
+    this[index1] = this.splice(index2, 1, this[index1])[0];
+    console.info("flag1");
+    console.info(this);
+    return this;
+  };
+ 
+    // 上移
+  Array.prototype.upRecord = function($index) {
+    if($index == 0) {
+        return;
+    }
+    this.swapItems($index, $index - 1);
+  };
+ 
+  // 下移
+  Array.prototype.downRecord = function($index) {
+      if($index == this.length -1) {
+          return;
+      }
+      this.swapItems($index, $index + 1);
+  };
+
+  window.pids = <%= @pids.values.to_json %>;
+  window.updating = false;
+
+  window.submit_hot_video = function(){
+    if(window.updating)return;
+    window.updating = true;
+    var $form = $("#page_form");
+    $.ajax({
+        type: "POST",
+        url: "/admin/hot_video",
+        data: {
+          ids: window.pids.join(","),
+        },
+        dataType: "json",
+        success: function (data) {
+          if(data.res){
+            window.submit_hot_video = function(){return false};
+            window.location.reload();
+          }else{
+            if(data.msg){
+              alert(data.msg);
+            }
+            window.updating = false;
+          }
+        },
+        error: function (msg) {
+          alert("抱歉，保存失败！");
+          window.updating = false;
+        }
+    });
+  }
+
+  window.add_hot_video = function(pid){
+    if(window.updating)return;
+    window.pids.unshift(pid);
+    submit_hot_video();
+  }
+
+  window.remove_hot_video = function(pid){
+    if(window.updating)return;
+    window.pids.deleteElementByValue(pid);
+    submit_hot_video();
+  }
+
+  window.move_up_hot_video = function(index){
+    if(window.updating)return;
+    window.pids.upRecord(index);
+    submit_hot_video();
+  }
+
+  window.move_down_hot_video = function(index){
+    if(window.updating)return;
+    window.pids.downRecord(index);
+    submit_hot_video();
+  }
+
+</script>

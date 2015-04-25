@@ -40,6 +40,8 @@ module Sinarey
     helpers Sinatra::Cookies
     set :cookie_options, {path:'/', expires: 2.weeks.from_now,httponly:false}
 
+    use Rack::Session::Cookie, { path:'/', expire_after:nil, key:Sinarey.session_key, secret:Sinarey.secret }
+
     set :static, false
 
     #logger configure

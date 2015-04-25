@@ -1,0 +1,54 @@
+<%= erb :_breadcrumbs,locals: {breadcrumbs: {"产品海报管理"=>"/admin/banner","创建新产品海报"=>"javascript:;"}} %>
+
+<article class="module width_full">
+  <header><h3>创建新产品海报</h3></header>
+
+  <div class="module_content">
+  
+    <form id="new_banner_form" action="/admin/create_banner" method="post" enctype="multipart/form-data">
+
+      <fieldset>
+        <div style="height:25px;"><label>选择产品</label></div>
+        <select name="production_id">
+          <option value="" selected>---请选择---</option>
+          <% @productions.each do |production| %>
+          <option value="<%~ production.id %>"><%~ production.title %></option>
+          <% end %>
+        </select>
+      </fieldset>
+
+      <fieldset>
+        <div style="height:25px;"><label>上传海报</label></div>
+        <div style="padding-left:8px;">
+          <input type="file" name="cover_path">
+        </div>
+      </fieldset>
+
+    </form>
+
+  </div>
+  <footer>
+    <div class="submit_link">
+      <input type="submit" value="保存" class="alt_btn" onclick="create_banner();">&nbsp;
+    </div>
+</footer>
+</article>
+
+<script>
+  var create_banner = function(){
+    var $form = $("#new_banner_form"),
+        production_id = $form.find('[name=production_id]').val(),
+        cover_path = $form.find('[name=cover_path]').val();
+
+    if(!production_id){
+      alert('请先选择产品');
+      return
+    };
+    if(!cover_path){
+      alert('请先上传海报');
+      return
+    };
+
+    $form.submit();
+  }
+</script>

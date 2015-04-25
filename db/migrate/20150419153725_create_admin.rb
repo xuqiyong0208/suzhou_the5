@@ -5,6 +5,7 @@ class CreateAdmin < ActiveRecord::Migration
       t.string :username, limit: 191
       t.string :email, limit: 191
       t.string :password, limit: 191
+      t.boolean :is_root, default: false
 
       t.timestamps
     end

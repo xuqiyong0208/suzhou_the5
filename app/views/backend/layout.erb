@@ -71,14 +71,17 @@
   </section><!-- end of secondary bar -->
   
   <aside id="sidebar" class="column">
-    <hr/>
     <h3>网站内容管理</h3>
     <ul class="toggle">
       <li class="icn_edit_article"><a href="/admin/production">产品管理</a></li>
       <li class="icn_edit_article"><a href="/admin/category">分类管理</a></li>
-      <li class="icn_edit_article"><a href="/admin/intro">修改公司简介</a></li>
+      <li class="icn_edit_article"><a href="/admin/banner">产品海报管理</a></li>
+      <li class="icn_edit_article"><a href="/admin/video">网站视频管理</a></li>
+      <li class="icn_edit_article"><a href="/admin/intro">修改公司介绍</a></li>
       <li class="icn_edit_article"><a href="/admin/contact">修改联系方式</a></li>
+      <li class="icn_edit_article"><a href="/admin/edit_password">修改管理员信息</a></li>
     </ul>
+
     <footer>
       <hr />
       <p><strong>Copyright &copy; 2015 THE FIFTH SEASON</strong></p>
@@ -87,7 +90,14 @@
 
   <section id="main" class="column">
     <%= yield %>
+
+    <div style="height:200px;">
+      &nbsp;
+    </div>
+
   </section>
+
+  <%= content_for?(:bodyScript).confirm && yield_content(:bodyScript) %>
 
 </body>
 

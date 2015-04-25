@@ -1,0 +1,70 @@
+<%= erb :_breadcrumbs,locals: {breadcrumbs: {"网站视频管理"=>"javascript:;"}} %>
+
+<article class="module width_full">
+  <header style="position:relative;">
+    <h3 class="tabs_involved">网站视频管理</h3>
+    <span style="display: inline-block;position: absolute;right: 15px;top: 5px;">
+      <input type="submit" value="创建新视频" class="alt_btn" onclick="window.location.href='/admin/new_video';">
+      <input type="submit" value="配置当前视频列表" class="alt_btn" onclick="window.location.href='/admin/hot_video';">
+    </span>
+  </header>
+  
+  <div class="tab_container">
+    <div id="tab1" class="tab_content" style="display: block;">
+      <% if @videos.present? %>
+        <table class="tablesorter" cellspacing="0"> 
+        <thead> 
+          <tr> 
+              <th class="header">视频名称</th>
+              <th class="header">操作</th> 
+          </tr>
+        </thead> 
+        <tbody> 
+          <% @videos.each do |video| %>
+          <tr>
+              <td><%~ video.title %></td>
+              <td>
+                <a href="/admin/show_video/<%~ video.id %>">查看</a> &nbsp; 
+                <a href="/admin/edit_video/<%~ video.id %>">修改</a> &nbsp; 
+                <a href="javascript:destroy_video(<%~ video.id %>);">删除</a> &nbsp;
+              </td> 
+          </tr>
+          <% end %>
+        </tbody> 
+        </table>
+
+      <% else %>
+        <div class="" style="padding:10px;">
+          目前网站还没有视频，请先创建...
+        </div>
+      <% end %>
+
+    </div>
+  </div>
+
+</article>
+
+<script>
+  var destroy_video = function(id){
+      if(!confirm("确认要删除该视频吗？\n删除后将无法恢复，请谨慎操作"))return;
+      $.ajax({
+          type: "POST",
+          url: "/admin/destroy_video",
+          data: {id: id},
+          dataType: "json",
+          success: function (data) {
+            if(data.res){
+              window.location.reload();
+            }else{
+              if(data.msg){
+                alert(data.msg);
+              }
+            }
+          },
+          error: function (msg) {
+            alert("抱歉，操作失败！");
+          }
+      });
+  }
+
+</script>

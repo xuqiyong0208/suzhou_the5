@@ -13,7 +13,7 @@
     </div>
 </div>
 
-<%= erb :_banner %>
+<%= erb :_banner, locals: {banners: @banners} %>
 
 <div class="main clear">
 	<div class="home">
@@ -21,15 +21,12 @@
     <%= erb :_category_panel, locals: {categories: @categories} %>
 
     <div class="right">
-    	<div class="exchange"><a href="#">卡券兑换</a></div>
+    	<div class="exchange"><a href="javascript:;">卡券兑换</a></div>
         <div class="video_box">
         	<ul>
-            	<li><a class="mediaplayer1" href="javascript:;"><i></i></a></li>
-                <li><a class="mediaplayer2" href="javascript:;"><i></i></a></li>
-                <li><a class="mediaplayer1" href="javascript:;"><i></i></a></li>
-                <li><a class="mediaplayer2" href="javascript:;"><i></i></a></li>
-                <li><a class="mediaplayer1" href="javascript:;"><i></i></a></li>
-                <li><a class="mediaplayer2" href="javascript:;"><i></i></a></li>
+                <% @videos.each_with_index do |video,index| %>
+            	<li><a class="<%= "mediaplayer#{index}" %>" href="javascript:;"><i></i></a></li>
+                <% end %>
             </ul>
         </div>
     </div>
@@ -50,34 +47,16 @@
 </div>
 
 <div class="mask"></div>
-<div class="tab mediaplayer1">
-    <div id="mediaplayer1"></div>
-</div>
 
-<div class="tab mediaplayer2">
-    <div id="mediaplayer2"></div>
+<% @videos.each_with_index do |video,index| %>
+<div class="tab <%= "mediaplayer#{index}" %>" style="z-index:1001;">
+    <div id="<%= "mediaplayer#{index}" %>"></div>
 </div>
+<% end %>
 
 <% content_for(:bodyScript) do %>
 <script type="text/javascript" src="<%~ static_url("js/jwplayer.js") %>"></script>
 <script type="text/javascript">
-
-jwplayer("mediaplayer1").setup({
-    flashplayer: "<%~ static_url("swf/player.swf") %>",
-    image: "<%~ static_url("video/demo.jpg") %>",
-    file: "<%~ static_url("video/demo.mp4") %>",
-    controlbar: 'bottom',
-    height : 460,
-    width : 760, 
-});
-jwplayer("mediaplayer2").setup({
-    flashplayer: "<%~ static_url("swf/player.swf") %>",
-    image: "<%~ static_url("video/demo2.png") %>",
-    file: "<%~ static_url("video/demo2.mp4") %>",
-    controlbar: 'bottom',
-    height : 460,
-    width : 760, 
-});
 
 $(function(){
 
@@ -108,9 +87,18 @@ $(function(){
             }
         });
     }
+    <% @videos.each_with_index do |video,index| %>
+    jwplayer('<%= "mediaplayer#{index}" %>').setup({
+        flashplayer: "<%~ static_url("swf/player.swf") %>",
+        image: "<%~ static_url("images/video_bg.jpg") %>",
+        file: "<%~ "#{video.video_path.url}" %>",
+        controlbar: 'bottom',
+        height : 460,
+        width : 760, 
+    });
 
-    popup(".tab.mediaplayer1",".video_box a.mediaplayer1");
-    popup(".tab.mediaplayer2",".video_box a.mediaplayer2");
+    popup('<%= ".tab.mediaplayer#{index}" %>' , '<%= ".video_box a.mediaplayer#{index}" %>');
+    <% end %>
 })
 </script>
 <% end %>

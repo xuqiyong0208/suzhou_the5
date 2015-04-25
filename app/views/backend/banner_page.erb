@@ -1,0 +1,82 @@
+<%= erb :_breadcrumbs,locals: {breadcrumbs: {"产品海报管理"=>"javascript:;"}} %>
+
+<article class="module width_full">
+  <header style="position:relative;">
+    <h3 class="tabs_involved">选择产品海报</h3>
+    <span style="display: inline-block;position: absolute;right: 15px;top: 5px;">
+      <input type="submit" value="创建新产品海报" class="alt_btn" onclick="window.location.href='/admin/new_banner';">
+      <input type="submit" value="配置当前海报列表" class="alt_btn" onclick="window.location.href='/admin/hot_banner';">
+    </span>
+  </header>
+  
+  <div class="tab_container">
+    <div id="tab1" class="tab_content" style="display: block;">
+      <% if @banner_dict.present? %>
+        <table class="tablesorter" cellspacing="0"> 
+        <thead> 
+          <tr> 
+              <th class="header">产品名称</th>
+              <th class="header">产品海报</th>  
+              <th class="header">操作</th> 
+          </tr>
+        </thead> 
+        <tbody> 
+          <% @banner_dict.each do |banner_id, data| %>
+          <% 
+            cover_url = data[:cover_url]
+            production = data[:production]
+          %>
+
+          <tr>
+              <td><%= production ? ERB::Util.html_escape(production.title.to_s) : "<font style='color:red;'>无法获取</font>" %></td>
+              <td>
+                <p style="display:inline-block;height:30px;">
+                  <% if cover_url %>
+                  <img height="30px" onerror="this.style.display='none';" src="<%~ cover_url %>" alt="">
+                  <% end %>
+                </p>
+              </td> 
+              <td>
+                <a href="/admin/edit_banner/<%~ banner_id %>">修改</a> &nbsp; 
+                <a href="javascript:destroy_banner(<%~ banner_id %>);">删除</a> &nbsp;
+              </td> 
+          </tr>
+          <% end %>
+        </tbody> 
+        </table>
+
+      <% else %>
+        <div class="" style="padding:10px;">
+          目前还没有产品海报，请先创建...
+        </div>
+      <% end %>
+
+    </div>
+  </div>
+
+</article>
+
+<script>
+  var destroy_banner = function(id){
+      if(!confirm("确认要删除该海报吗？\n删除后将无法恢复，请谨慎操作"))return;
+      $.ajax({
+          type: "POST",
+          url: "/admin/destroy_banner",
+          data: {id: id},
+          dataType: "json",
+          success: function (data) {
+            if(data.res){
+              window.location.reload();
+            }else{
+              if(data.msg){
+                alert(data.msg);
+              }
+            }
+          },
+          error: function (msg) {
+            alert("抱歉，操作失败！");
+          }
+      });
+  }
+
+</script>

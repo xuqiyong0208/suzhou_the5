@@ -1,0 +1,46 @@
+
+<%= erb :_breadcrumbs,locals: {breadcrumbs: {"网站视频管理"=>"/admin/video","查看视频 | #{@video.title}"=>"javascript:;"}} %>
+
+<% content_for(:bodyScript) do %>
+
+<script type="text/javascript" src="<%~ static_url("js/jwplayer.js") %>"></script>
+
+<style>
+  
+.video_box {
+  width: 800px;
+  height: 500px;
+  background: #FFF;
+  position: absolute;
+  z-index: 100;
+  padding: 20px;
+}
+
+</style>
+
+<script type="text/javascript">
+
+jwplayer("mediaplayer1").setup({
+    flashplayer: "<%~ static_url("swf/player.swf") %>",
+    image: "<%~ static_url("images/video_bg.jpg") %>",
+    file: "<%~ "#{@video.video_path.url}" %>",
+    controlbar: 'bottom',
+    height : 460,
+    width : 760, 
+});
+
+</script>
+<% end %>
+
+<article class="module width_full">
+  <header><h3>查看视频 | <%~ @video.title %></h3></header>
+
+  <div class="module_content">
+    <div style="height:500px;">
+      <div class="video_box">
+        <div id="mediaplayer1"></div>
+      </div>
+    </div>
+  </div>
+
+</article>
