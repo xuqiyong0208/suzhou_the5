@@ -1,12 +1,6 @@
 source 'http://ruby.taobao.org/'
 #source 'http://rubygems.org/'
 
-
-if RUBY_PLATFORM !~ /mingw/i and ENV['SINAREY_ENV'] == 'heroku'
-  puts 'set ruby version at 2.0.0'
-  ruby '2.0.0'
-end
-
 gem 'thin'
 
 gem 'sinarey', '1.0.4'
