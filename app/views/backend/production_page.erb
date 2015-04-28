@@ -26,8 +26,9 @@
           <td><%~ production.title %></td>
           <td>
             <p style="display:inline-block;height:30px;">
-              <% if production.cover_path.url %>
-              <img height="30px" onerror="this.style.display='none';" src="<%~ production.cover_path.url %>" alt="">
+              <% cover_url = production.cover_path.thumb.url %>
+              <% if cover_url %>
+              <img height="30px" onerror="this.style.display='none';" src="<%~ cover_url %>" alt="">
               <% end %>
             </p>
           </td> 

@@ -1,40 +1,39 @@
-<%= erb :_breadcrumbs,locals: {breadcrumbs: {"产品海报管理"=>"/admin/banner","配置首页海报列表"=>"javascript:;"}} %>
+<%= erb :_breadcrumbs,locals: {breadcrumbs: {"基地管理"=>"/admin/base","配置网站显示基地列表"=>"javascript:;"}} %>
 
 <article class="module width_half">
   <header style="position:relative;">
-    <h3 class="tabs_involved">选择产品海报</h3>
+    <h3 class="tabs_involved">选择基地</h3>
   </header>
   
   <div class="tab_container">
     <div id="tab1" class="tab_content" style="display: block;">
-      <% if @banner_dict.present? %>
+      <% if @bases_dict.present? %>
         <table class="tablesorter" cellspacing="0"> 
         <thead> 
           <tr> 
-              <th class="header">产品名称</th>
-              <th class="header">产品海报</th>  
+              <th class="header">基地名称</th>
+              <th class="header">基地封面图</th>  
               <th class="header">操作</th> 
           </tr>
         </thead> 
         <tbody> 
-          <% @banner_dict.each do |banner_id, data| %>
+          <% @bases_dict.each do |base_id, base| %>
           <% 
-            next if @pids[banner_id]
-            cover_url = data[:cover_url]
-            production = data[:production]
+            next if @pids[base_id]
           %>
 
           <tr>
-              <td><%= production ? ERB::Util.html_escape(production.title.to_s) : "<font style='color:red;'>无法获取</font>" %></td>
+              <td><%~ base.title %></td>
               <td>
                 <p style="display:inline-block;height:30px;">
+                  <% cover_url = base.cover_path.thumb.url %>
                   <% if cover_url %>
                   <img height="30px" width="50px" onerror="this.style.display='none';" src="<%~ cover_url %>" alt="">
                   <% end %>
                 </p>
               </td> 
               <td>
-                <a href="javascript:add_hot_banner(<%~ banner_id %>);">添加到首页海报列表</a> &nbsp;
+                <a href="javascript:add_hot_base(<%~ base_id %>);">添加到网站显示基地列表</a> &nbsp;
               </td> 
           </tr>
           <% end %>
@@ -48,25 +47,26 @@
 </article>
 
 <article class="module width_half">
-  <header><h3>首页海报列表</h3></header>
+  <header><h3>网站显示基地列表</h3></header>
   <div>
     <div class="module_content">
       <% if @pids.present? %>
         <% hot_index = 0 %>
-        <% @pids.each_value do |banner_id| %>
-        <% data = @banner_dict[banner_id] %>
+        <% @pids.each_value do |base_id| %>
+        <% base = @bases_dict[base_id] %>
         <div class="message" style="padding:5px 0;">
-          <div class="width_one_third" style="display:inline-block;"><strong><%~ data[:production].presence && data[:production].title %></strong>&nbsp;</div>
+          <div class="width_one_third" style="display:inline-block;"><strong><%~ base.title %></strong>&nbsp;</div>
           <div class="width_one_third" style="display:inline-block;">
             <p style="display:inline-block;height:30px;margin: 0;">
-              <% if data[:cover_url] %>
-              <img height="30px" width="50px" onerror="this.style.display='none';" src="<%~ data[:cover_url] %>" alt="">
+              <% cover_url = base.cover_path.thumb.url %>
+              <% if cover_url %>
+              <img height="30px" width="50px" onerror="this.style.display='none';" src="<%~ cover_url %>" alt="">
               <% end %>
             </div>
           <div class="width_one_third" style="display:inline-block;">
-            <a href="javascript:remove_hot_banner(<%~ banner_id %>);">移除</a>&nbsp;
-            <a href="javascript:move_up_hot_banner(<%~ hot_index %>);">上移</a>&nbsp;
-            <a href="javascript:move_down_hot_banner(<%~ hot_index %>);">下移</a></div>
+            <a href="javascript:remove_hot_base(<%~ base_id %>);">移除</a>&nbsp;
+            <a href="javascript:move_up_hot_base(<%~ hot_index %>);">上移</a>&nbsp;
+            <a href="javascript:move_down_hot_base(<%~ hot_index %>);">下移</a></div>
           <div class="clear"></div>
         </div>
         <% hot_index += 1 %>
@@ -126,19 +126,20 @@
   window.pids = <%= @pids.values.to_json %>;
   window.updating = false;
 
-  window.submit_hot_banner = function(){
+  window.submit_hot_base = function(){
     if(window.updating)return;
     window.updating = true;
+
     $.ajax({
         type: "POST",
-        url: "/admin/hot_banner",
+        url: "/admin/hot_base",
         data: {
           ids: window.pids.join(","),
         },
         dataType: "json",
         success: function (data) {
           if(data.res){
-            window.submit_hot_banner = function(){return false};
+            window.submit_hot_base = function(){return false};
             window.location.reload();
           }else{
             if(data.msg){
@@ -154,28 +155,28 @@
     });
   }
 
-  window.add_hot_banner = function(pid){
+  window.add_hot_base = function(pid){
     if(window.updating)return;
     window.pids.unshift(pid);
-    submit_hot_banner();
+    submit_hot_base();
   }
 
-  window.remove_hot_banner = function(pid){
+  window.remove_hot_base = function(pid){
     if(window.updating)return;
     window.pids.deleteElementByValue(pid);
-    submit_hot_banner();
+    submit_hot_base();
   }
 
-  window.move_up_hot_banner = function(index){
+  window.move_up_hot_base = function(index){
     if(window.updating)return;
     window.pids.upRecord(index);
-    submit_hot_banner();
+    submit_hot_base();
   }
 
-  window.move_down_hot_banner = function(index){
+  window.move_down_hot_base = function(index){
     if(window.updating)return;
     window.pids.downRecord(index);
-    submit_hot_banner();
+    submit_hot_base();
   }
 
 </script>

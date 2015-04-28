@@ -10,11 +10,12 @@
       
       <input type="hidden" name="id" value="<%~ @banner.id %>">
 
-      <% if @banner.cover_path.url %>
+      <% cover_url = @banner.cover_path.thumb.url %>
+      <% if cover_url %>
       <fieldset class="overflow-x">
         <div style="height:25px;"><label>当前海报</label></div>
         <div style="padding-left:10px;">
-          <img src="<%~ @banner.cover_path.url %>" alt="">
+          <img src="<%~ cover_url %>" alt="">
         </div>
       </fieldset>
       <% end %>

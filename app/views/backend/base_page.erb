@@ -1,44 +1,43 @@
-<%= erb :_breadcrumbs,locals: {breadcrumbs: {"产品海报管理"=>"javascript:;"}} %>
+<%= erb :_breadcrumbs,locals: {breadcrumbs: {"基地管理"=>"javascript:;"}} %>
 
 <article class="module width_full">
   <header style="position:relative;">
-    <h3 class="tabs_involved">产品海报管理</h3>
+    <h3 class="tabs_involved">基地管理</h3>
     <span style="display: inline-block;position: absolute;right: 15px;top: 5px;">
-      <input type="submit" value="创建新产品海报" class="alt_btn" onclick="window.location.href='/admin/new_banner';">
-      <input type="submit" value="配置首页海报列表" class="alt_btn" onclick="window.location.href='/admin/hot_banner';">
+      <input type="submit" value="创建新基地" class="alt_btn" onclick="window.location.href='/admin/new_base';">
+      <input type="submit" value="配置网站显示基地列表" class="alt_btn" onclick="window.location.href='/admin/hot_base';">
     </span>
   </header>
   
   <div class="tab_container">
     <div id="tab1" class="tab_content" style="display: block;">
-      <% if @banner_dict.present? %>
+      <% if @bases.present? %>
         <table class="tablesorter" cellspacing="0"> 
         <thead> 
           <tr> 
-              <th class="header">产品名称</th>
-              <th class="header">产品海报</th>  
+              <th class="header">基地标题</th>
+              <th class="header">基地封面图</th>  
               <th class="header">操作</th> 
           </tr>
         </thead> 
         <tbody> 
-          <% @banner_dict.each do |banner_id, data| %>
-          <% 
-            cover_url = data[:cover_url]
-            production = data[:production]
-          %>
+          <% @bases.each do |base| %>
 
           <tr>
-              <td><%= production ? ERB::Util.html_escape(production.title.to_s) : "<font style='color:red;'>无法获取</font>" %></td>
+              <td><%~ base.title %></td>
               <td>
                 <p style="display:inline-block;height:30px;">
+                  <% cover_url = base.cover_path.thumb.url %>
                   <% if cover_url %>
                   <img height="30px" onerror="this.style.display='none';" src="<%~ cover_url %>" alt="">
                   <% end %>
                 </p>
               </td> 
               <td>
-                <a href="/admin/edit_banner/<%~ banner_id %>">修改</a> &nbsp; 
-                <a href="javascript:destroy_banner(<%~ banner_id %>);">删除</a> &nbsp;
+                <a href="/admin/edit_base/<%~ base.id %>">修改基本信息</a> &nbsp; 
+                <a href="/admin/edit_base_cover/<%~ base.id %>">更新图片</a> &nbsp; 
+                <a href="/base/<%~ base.name %>" target="_blank">打开网页查看</a> &nbsp; 
+                <a href="javascript:destroy_base(<%~ base.id %>);">删除</a> &nbsp;
               </td> 
           </tr>
           <% end %>
@@ -47,7 +46,7 @@
 
       <% else %>
         <div class="" style="padding:10px;">
-          目前还没有产品海报，请先创建...
+          目前还没有基地，请先创建...
         </div>
       <% end %>
 
@@ -57,11 +56,11 @@
 </article>
 
 <script>
-  var destroy_banner = function(id){
-      if(!confirm("确认要删除该海报吗？\n删除后将无法恢复，请谨慎操作"))return;
+  var destroy_base = function(id){
+      if(!confirm("确认要删除该基地吗？\n删除后将无法恢复，请谨慎操作"))return;
       $.ajax({
           type: "POST",
-          url: "/admin/destroy_banner",
+          url: "/admin/destroy_base",
           data: {id: id},
           dataType: "json",
           success: function (data) {

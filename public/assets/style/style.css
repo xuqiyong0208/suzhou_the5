@@ -139,8 +139,33 @@ button {
 }
 .exchange a:hover {background: #28dcc4; box-shadow: 0px 0px 2px rgba(0,0,0,0.3);}
 
+/*----area_box---*/
+.area_box { overflow: hidden;}
+.area_box h1 {
+	padding: 0 20px; 
+	font-size: 24px; 
+	color: #318c80; 
+	line-height: 36px;
+	margin-bottom: 20px;
+}
+.area_box li { float: left; width: 50%; height: 220px; font-size: 0;}
+.area_box li a { 
+	margin: 0px 0px 20px 20px; 
+	display: block; 
+	height: 200px;
+	text-align: center;
+}
+
+
 /*---video_box--*/
 .video_box { overflow: hidden;}
+.video_box h1 {
+	padding: 0 20px; 
+	font-size: 24px; 
+	color: #318c80; 
+	line-height: 36px;
+	margin-bottom: 20px;
+}
 .video_box li { float: left; width: 50%; height: 220px;}
 .video_box li a { 
 	margin: 0px 0px 20px 20px; 
@@ -192,7 +217,7 @@ button {
 	line-height: 36px;
 	margin-bottom: 20px;
 }
-.company_right p { font-size: 14px; line-height: 24px; margin-bottom: 12px;}
+.company_right p { font-size: 14px; line-height: 28px; margin-bottom: 20px;}
 
 /*------product产品中心--------*/
 .product { position: relative; padding-left: 220px; width: 996px; margin: 0 auto;}
@@ -252,7 +277,7 @@ button {
 	line-height: 36px;
 	margin-bottom: 20px;
 }
-.contact_right p { font-size: 14px; line-height: 24px; margin-bottom: 12px;}
+.contact_right p { font-size: 14px; line-height: 28px; margin-bottom: 20px;}
 
 .contact_right h3 { font-size: 16px; line-height: 32px; padding-left: 25px;}
 .contact_right li { height: 20px; line-height: 20px; padding-left: 25px; margin: 5px 0; font-size: 12px;}
@@ -260,3 +285,20 @@ button {
 .contact_right li.dh { background: url(../images/addIcon.png) no-repeat 0 -20px;}
 .contact_right li.qq { background: url(../images/addIcon.png) no-repeat 0 -60px;}
 .contact_right li.mail { background: url(../images/addIcon.png) no-repeat 0 -40px;}
+
+
+
+/*---area基地内容--*/
+.area { overflow: hidden; width: 996px; margin: 0 auto;}
+.area h1 { 
+	border-left: 2px #318c80 solid; 
+	padding: 0 20px; 
+	font-size: 24px; 
+	color: #318c80; 
+	line-height: 36px;
+	margin-bottom: 20px;
+	margin-left: 20px;
+}
+.areaBox_con { border-top: 1px #f1f1f1 solid; padding-top: 20px;}
+.areaBox_con img { float: left; margin: 0 20px 20px 0; clear: both;}
+.areaBox_con p { font-size: 14px; color: #333; line-height: 24px; margin-bottom: 20px;}

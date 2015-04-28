@@ -24,8 +24,9 @@
           <td><%~ category.title %></td>
           <td>
             <p style="display:inline-block;height:30px;">
-              <% if category.logo_path.url %>
-              <img height="30px" onerror="this.style.display='none';" src="<%~ category.logo_path.url %>" alt="">
+              <% cover_url = category.logo_path.url %>
+              <% if cover_url %>
+              <img height="30px" onerror="this.style.display='none';" src="<%~ cover_url %>" alt="">
               <% end %>
             </p>
           </td> 

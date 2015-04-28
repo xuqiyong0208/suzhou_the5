@@ -301,7 +301,7 @@ class BackendController < ApplicationController
 
     hot = Meta.where(name: 'hot_production', page: 1).first
 
-    max_size = 10
+    max_size = 50
     if hot
       current_ids_arr = hot.content.to_s.split(",")
     else
@@ -674,7 +674,7 @@ class BackendController < ApplicationController
 
     hot = Meta.where(name: 'hot_video', page: 1).first
 
-    max_size = 6
+    max_size = 50
     if hot
       current_ids_arr = hot.content.to_s.split(",")
       if current_ids_arr.length > max_size
@@ -795,6 +795,185 @@ class BackendController < ApplicationController
   end
 
 
+  #基地展示管理页
+  def base_page
+
+    @bases = Base.reverse_order(:id).all
+
+    halt_page(:base_page)
+  end
+
+  #新建基地展示表单页
+  def new_base_page
+
+    halt_page(:new_base_page)
+  end
+
+  #新建基地展示
+  def do_create_base
+
+    name, title, intro, content = params[:name].to_s, params[:title].to_s, params[:intro].to_s, params[:content].to_s
+    halt_json(res:false, msg: "请输入基地展示ID") if name.blank?
+
+    halt_json(res:false, msg: "基地展示ID格式不正确，仅支持英文字母、数字以及下划线") if !name_regex_match?(name)
+
+    halt_json(res:false, msg: "请输入基地展示标题") if title.blank?
+
+    base = Base.new
+    base.name = name
+    base.title = title
+    base.intro = intro[0,191]
+    base.save
+
+    content = params[:content].to_s
+    description = BaseDescription.where(base_id: base.id).first
+    if description
+      description.update(content:content)
+    else
+      BaseDescription.create(content:content, base_id: base.id)
+    end
+
+    halt_json(res: true)
+  end
+
+  #编辑基地展示表单页
+  def edit_base_page
+
+    @base = Base.where(id: params[:id]).first
+    halt_404 if @base.nil?
+
+    record = BaseDescription.where(base_id: @base.id).first
+    @content = record && record.content
+
+    halt_page(:edit_base_page)
+  end
+
+  #更新基地展示
+  def do_update_base
+
+    base = Base.where(id: params[:id]).first
+    halt_json(res:false, msg: "指定基地展示不存在") if base.nil?
+
+    name, title, intro = params[:name].to_s, params[:title].to_s, params[:intro].to_s
+    halt_json(res:false, msg: "请输入基地展示ID") if name.blank?
+
+    halt_json(res:false, msg: "基地展示ID格式不正确，仅支持英文字母、数字以及下划线") if !name_regex_match?(name)
+
+    halt_json(res:false, msg: "请输入基地展示标题") if title.blank?
+
+    base.name = name
+    base.title = title
+    base.intro = intro[0,191]
+    base.save
+
+    content = params[:content].to_s
+    description = BaseDescription.where(base_id: base.id).first
+    if description
+      description.update(content:content)
+    else
+      BaseDescription.create(content:content, base_id: base.id)
+    end
+
+    halt_json(res:true)
+  end
+
+  def edit_base_cover_page
+
+    @base = Base.where(id: params[:id]).first
+    halt_404 if @base.nil?
+
+    halt_page(:edit_base_cover_page)
+  end
+
+  def do_update_base_cover
+
+    @base = Base.where(id: params[:id]).first
+    redirect_to_error_page "抱歉，你选择的分类不存在或者已被删除" if !@base
+
+    cover_path = params[:cover_path]
+    redirect_to_error_page "抱歉，更新分类图片失败" if cover_path.nil? or cover_path.class != Hash
+
+    @base.cover_path = cover_path
+    if !@base.save
+      redirect_to_error_page
+    end
+    redirect_to request.referer || "/admin"
+  end
+
+  #删除基地展示
+  def do_destroy_base
+    @base = Base.where(id: params[:id]).first
+    @base.destroy if @base
+    halt_json(res:true)
+  end
+
+  #当前基地展示列表管理页
+  def hot_base_page
+
+    bases = Base.reverse_order(:id).all
+
+    @bases_dict = {}
+    bases.each do |base|
+      @bases_dict[base.id] = base
+    end
+
+    @pids ={}
+    hot = Meta.where(name: 'hot_base', page: 1).first
+    if hot
+      ids = hot.content.to_s.split(",")
+      ids.each do |vid|
+        vid = vid.to_i
+        next if vid<=0 or @bases_dict[vid].nil?
+        @pids[vid] = vid
+      end
+    end
+
+    halt_page(:hot_base_page)
+  end
+
+  #更新基地展示列表
+  def update_hot_base
+
+    ids_str = params[:ids].to_s
+    ids_arr = ids_str.split(",")
+
+    genenrate_ids_arr = [] 
+
+    ids_arr.each do |pid|
+      pid = pid.to_i
+      next if pid <= 0
+      video = Base.where(id:pid).first
+      if video
+        genenrate_ids_arr << video.id
+      end
+    end
+
+    hot = Meta.where(name: 'hot_base', page: 1).first
+
+    max_size = 50
+    if hot
+      current_ids_arr = hot.content.to_s.split(",")
+      if current_ids_arr.length > max_size
+        need_repair = true
+      end
+    end
+
+    if need_repair
+      genenrate_ids_arr = genenrate_ids_arr.first(max_size)
+    elsif genenrate_ids_arr.length > max_size
+      halt_json(res: false, msg: "抱歉，当前视频数量不能超过#{max_size}个")
+    end
+
+    genenrate_ids_str =genenrate_ids_arr.uniq.join(",")
+
+    if hot
+      hot.update(content: genenrate_ids_str)
+    else
+      Meta.create(content: genenrate_ids_str, name: 'hot_base')
+    end
+    halt_json(res:true)
+  end
+
   def edit_password_page
 
     halt_page(:edit_password_page)
@@ -811,8 +990,6 @@ class BackendController < ApplicationController
     halt_json(res:false, msg: error_msg) if error_msg
 
     is_changed = username!=@admin.username || email!=@admin.email || (password.present? && password!=@admin.password)
-
-    p is_changed
 
     if is_changed
       @admin.username = username

@@ -96,6 +96,29 @@ class BackendRoute < BackendController
   route :post,  '/admin/destroy_category' do dispatch(:do_destroy_category) end
 
 
+
+  route :get,   '/admin/base'             do dispatch(:base_page) end
+
+  route :get,   '/admin/new_base'         do dispatch(:new_base_page) end  
+
+  route :post,   '/admin/create_base'     do dispatch(:do_create_base) end    
+
+  route :get,   '/admin/edit_base/:id'    do dispatch(:edit_base_page) end
+
+  route :post,  '/admin/update_base'      do dispatch(:do_update_base) end
+
+  route :get,   '/admin/edit_base_cover/:id'  do dispatch(:edit_base_cover_page) end
+
+  route :post,  '/admin/update_base_cover' do dispatch(:do_update_base_cover) end
+
+  route :post,  '/admin/destroy_base'     do dispatch(:do_destroy_base) end
+
+  route :get,   '/admin/hot_base'         do dispatch(:hot_base_page) end
+
+  route :post,  '/admin/hot_base'         do dispatch(:update_hot_base) end
+
+
+
   route :get,   '/admin/edit_password'        do dispatch(:edit_password_page) end
 
   route :post,  '/admin/update_password'      do dispatch(:do_update_password) end
@@ -103,21 +126,39 @@ class BackendRoute < BackendController
 
   route :get,   '/admin/error_page'       do dispatch(:error_page) end
 
-  route :get,   '/ueditor/server_url' do
+  route :get,:post, '/ueditor/server_url'  do
 
     case params[:action]
     when "config"
     opts = {
-        imageUrl: "/ueditor/php/controller.php?action=uploadimage",
+        imageUrlPrefix: "",
         imagePath: static_url(""),
         imageFieldName: "upfile",
-        imageMaxSize: 2048,
-        imageAllowFiles: [".png", ".jpg", ".jpeg", ".gif", ".bmp"],
+        imageMaxSize: 10240,
+        imageAllowFiles: [".png", ".jpg", ".jpeg"],
         imageActionName: "simpleupload"
     }
     halt_json(opts)
     when "simpleupload"
-      "TODO simpleupload"
+
+      upfile = params[:upfile]
+      halt_500 if upfile.nil? or upfile.class != Hash
+
+      model = UeditorFile.new
+      model.cover_path = upfile
+      halt_500 if !model.save
+
+      cover = model.cover_path
+
+      result = {
+        original: cover.filename,
+        name: cover.filename,
+        url: cover.url,
+        size: cover.size,
+        type: ".#{cover.file.extension}",
+        state: "SUCCESS"
+      }
+      halt_json(result)
     when nil
       "action is underfined"
     else

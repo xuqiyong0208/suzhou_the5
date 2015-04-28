@@ -9,11 +9,12 @@
 
       <input type="hidden" name="id" value="<%~ @production.id %>">
 
-      <% if @production.cover_path.url %>
+      <% cover_url = @production.cover_path.url %>
+      <% if cover_url %>
       <fieldset>
         <div style="height:25px;"><label>当前图片</label></div>
         <div style="padding-left:10px;">
-          <img src="<%~ @production.cover_path.url %>" alt="">
+          <img src="<%~ cover_url %>" alt="">
         </div>
       </fieldset>
       <% end %>

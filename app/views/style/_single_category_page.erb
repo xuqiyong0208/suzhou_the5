@@ -27,7 +27,7 @@
                     <% @productions.each do |production| %>
                     <li>
                         <a href="<%~ "/production/#{production.name}" %>">
-                            <div class="hp_img"><img src="<%~ production.cover_path.url %>" /></div>
+                            <div class="hp_img"><img src="<%~ production.cover_path.thumb.url %>" /></div>
                             <div class="hp_text">
                                 <h3><%~ production.title %></h3>
                                 <p><%~ production.intro.to_s.truncate(50) %></p>
@@ -53,19 +53,3 @@
         <div class="f_copyright">Copyright ©苏州第五季食品科技有限公司所有 2015-2016. All Rights Reserved.</div>
     </div>
 </div>
-
-<div class="mask"></div>
-<div class="tab">
-	<div id="mediaplayer">JW Player goes here</div>
-</div>
-<script type="text/javascript" src="<%~ static_url("js/jwplayer.js") %>"></script>
-<script type="text/javascript">
-jwplayer("mediaplayer").setup({
-	flashplayer: "<%~ static_url("swf/player.swf") %>",
-	image: "<%~ static_url("video/demo.jpg") %>",
-    file: "<%~ static_url("video/demo.mp4") %>",
-    controlbar: 'bottom',
-	height : 460,
-	width : 760, 
-});
-</script>

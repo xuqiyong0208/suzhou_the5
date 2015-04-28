@@ -3,7 +3,7 @@
 require 'mini_magick'
 require 'carrierwave/processing/mime_types'
 
-class CategoryCoverUploader < CarrierWave::Uploader::Base
+class BaseCoverUploader < CarrierWave::Uploader::Base
 
   include CarrierWave::MimeTypes
   process :set_content_type

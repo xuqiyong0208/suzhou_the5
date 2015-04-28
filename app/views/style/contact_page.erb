@@ -14,6 +14,7 @@
 		<ul>
 			<li><a href="/">首页</a></li>
 			<li><a href="/about">公司介绍</a></li>
+      <li><a href="/base">基地展示</a></li>
 			<li><a href="/production">产品中心</a></li>
 			<li><a href="/contact" class="hover">联系我们</a></li>
 		</ul>
@@ -154,18 +155,3 @@
     </div>
 </div>
 
-<div class="mask"></div>
-<div class="tab">
-	<div id="mediaplayer">JW Player goes here</div>
-</div>
-<script type="text/javascript" src="<%~ static_url("js/jwplayer.js") %>"></script>
-<script type="text/javascript">
-jwplayer("mediaplayer").setup({
-	flashplayer: "<%~ static_url("swf/player.swf") %>",
-	image: "<%~ static_url("video/demo.jpg") %>",
-	file: "<%~ static_url("video/demo.mp4") %>",
-	controlbar: 'bottom',
-	height : 460,
-	width : 760, 
-});
-</script>

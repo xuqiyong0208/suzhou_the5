@@ -1,0 +1,105 @@
+<% base_title = (@base&&@base.title).to_s %>
+<%= erb :_breadcrumbs,locals: {breadcrumbs: {"基地管理"=>"/admin/base","修改#{base_title}基地信息"=>"javascript:;"}} %>
+
+<% content_for(:head) do %>
+    <script>window.STATIC_URL="<%~ backend_static_url("") %>"</script>
+    <script type="text/javascript" src="<%~ backend_static_url "ueditor/ueditor.config.js" %>"></script>
+    <script type="text/javascript" src="<%~ backend_static_url "ueditor/editor_api.js" %>"></script>
+<% end %>
+
+<article class="module width_full">
+  <header><h3>修改基地信息 | <%~ base_title %></h3></header>
+
+  <div class="module_content">
+  
+    <form id="edit_base_form">
+
+      <input type="hidden" name="id" value="<%~ @base.id %>">
+
+      <fieldset>
+        <label>基地标题</label>
+        <input type="text" name="title" value="<%~ @base.title %>">
+      </fieldset>
+
+      <fieldset>
+        <label style="width:99%;">基地ID</label>
+        <input type="text" name="name" value="<%~ @base.name %>">
+      </fieldset>
+
+      <fieldset>
+        <div style="height:25px;"><label>基地介绍</label></div>
+        <div>
+          <script type="text/plain" id="myEditor"></script>
+          <input type="hidden" name="content" value="<%~ @content %>">
+          <input type="hidden" name="intro" value="<%~ @base.intro %>">
+        </div>
+      </fieldset>
+
+    </form>
+
+  </div>
+  <footer>
+    <div class="submit_link">
+      <input type="submit" value="保存" class="alt_btn" onclick="update_base();">&nbsp;
+      <input type="submit" value="返回" onclick="window.location.href='/admin/base';">&nbsp;
+    </div>
+</footer>
+</article>
+
+
+<script>
+
+  window.editor = UE.getEditor('myEditor',{
+    toolbars:[['FullScreen', 'Source', 'Undo', 'Redo','Bold','|','link','simpleupload','|','imagenone', 'imageleft', 'imageright', 'imagecenter']],
+    initialFrameHeight:300,
+    initialFrameWidth: "100%",
+    wordCount:false,
+    elementPathEnabled:false,
+    enableAutoSave:false
+  });
+
+  window.editor.ready(function() {
+    window.editor.setContent("<%= escape_javascript @content.to_s %>");
+  });
+
+  var update_base = function(){
+
+    var $form = $("#edit_base_form"),
+        name = $form.find('[name=name]').val(),
+        title = $form.find('[name=title]').val();
+
+    if(!title){
+      alert('请先输入基地标题');
+      return
+    };
+    if(!name){
+      alert('请先输入基地ID');
+      return
+    };
+
+    var content = window.editor.getContent(),
+        intro = window.editor.getContentTxt();
+
+    $form.find("[name=content]").val(content);
+    $form.find("[name=intro]").val(intro);
+
+    $.ajax({
+        type: "POST",
+        url: "/admin/update_base",
+        data: $form.serialize(),
+        dataType: "json",
+        success: function (data) {
+          if(data.res){
+            window.location.href="/admin/base";
+          }else{
+            if(data.msg){
+              alert(data.msg);
+            }
+          }
+        },
+        error: function (msg) {
+          alert("抱歉，保存失败！");
+        }
+    });
+  }
+</script>

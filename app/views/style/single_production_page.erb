@@ -6,6 +6,7 @@
 		<ul>
 			<li><a href="/">首页</a></li>
 			<li><a href="/about">公司介绍</a></li>
+      <li><a href="/base">基地展示</a></li>
 			<li><a href="/production" class="hover">产品中心</a></li>
 			<li><a href="/contact">联系我们</a></li>
 		</ul>
@@ -24,9 +25,10 @@
     	<div class="proBox">
         	<h1><%~ @category.title %></h1>
             <div class="proBox_con">
-              <% if @category.cover_path.url.present? %>
+              <% cover_url = @category.cover_path.url %>
+              <% if cover_url %>
         	    <div class="proBox_img">
-                <img src="<%~ @category.cover_path.url %>" />
+                <img src="<%~ cover_url %>" />
               </div>
               <% end %>
               <%= sanitize_content @content.to_s %>
@@ -48,19 +50,3 @@
         <div class="f_copyright">Copyright ©苏州第五季食品科技有限公司所有 2015-2016. All Rights Reserved.</div>
     </div>
 </div>
-
-<div class="mask"></div>
-<div class="tab">
-	<div id="mediaplayer">JW Player goes here</div>
-</div>
-<script type="text/javascript" src="<%~ static_url("js/jwplayer.js") %>"></script>
-<script type="text/javascript">
-jwplayer("mediaplayer").setup({
-	flashplayer: "<%~ static_url("swf/player.swf") %>",
-	image: "<%~ static_url("video/demo.jpg") %>",
-    file: "<%~ static_url("video/demo.mp4") %>",
-    controlbar: 'bottom',
-	height : 460,
-	width : 760, 
-});
-</script>

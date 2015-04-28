@@ -1,18 +1,18 @@
-<%= erb :_breadcrumbs,locals: {breadcrumbs: {"分类管理"=>"/admin/category","修改#{@category.title}分类图片"=>"javascript:;"}} %>
+<%= erb :_breadcrumbs,locals: {breadcrumbs: {"基地管理"=>"/admin/base","修改#{@base.title}基地封面图"=>"javascript:;"}} %>
 
 <article class="module width_full">
-  <header><h3>修改分类图片 | <%~ @category.title %></h3></header>
+  <header><h3>修改基地封面图 | <%~ @base.title %></h3></header>
 
   <div class="module_content">
   
-    <form id="page_form" action="/admin/update_category_logo" method="post" enctype="multipart/form-data">
+    <form id="update_base_cover_form" action="/admin/update_base_cover" method="post" enctype="multipart/form-data">
 
-      <input type="hidden" name="id" value="<%~ @category.id %>">
+      <input type="hidden" name="id" value="<%~ @base.id %>">
 
-      <% cover_url = @category.logo_path.url %>
+      <% cover_url = @base.cover_path.thumb.url %>
       <% if cover_url %>
       <fieldset>
-        <div style="height:25px;"><label>当前图片</label></div>
+        <div style="height:25px;"><label>当前封面</label></div>
         <div style="padding-left:10px;">
           <img src="<%~ cover_url %>" alt="">
         </div>
@@ -22,16 +22,16 @@
       <fieldset>
         <div style="height:25px;"><label>上传新图片</label></div>
         <div style="padding-left:8px;">
-          <input type="file" name="logo_path">
+          <input type="file" name="cover_path">
         </div>
       </fieldset>
 
       <script type="text/javascript">
 
         var do_submit_form = function(){
-          var $form = $("#page_form"),
-              logo_path = $form.find('[name=logo_path]').val();
-          if(logo_path){
+          var $form = $("#update_base_cover_form"),
+              cover_path = $form.find('[name=cover_path]').val();
+          if(cover_path){
             $form.submit();  
           }else{
             redirect_back();
@@ -39,7 +39,7 @@
         }
 
         var redirect_back = function(){
-          window.location.href='/admin/category';
+          window.location.href='/admin/base';
         }
 
       </script>

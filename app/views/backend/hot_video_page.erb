@@ -1,4 +1,4 @@
-<%= erb :_breadcrumbs,locals: {breadcrumbs: {"网站视频管理"=>"/admin/video","配置当前视频列表"=>"javascript:;"}} %>
+<%= erb :_breadcrumbs,locals: {breadcrumbs: {"网站视频管理"=>"/admin/video","配置首页视频列表"=>"javascript:;"}} %>
 
 <article class="module width_half">
   <header style="position:relative;">
@@ -25,7 +25,7 @@
           <tr>
               <td><%~ video.title  %></td>
               <td>
-                <a href="javascript:add_hot_video(<%~ video_id %>);">添加到当前海报列表</a> &nbsp;
+                <a href="javascript:add_hot_video(<%~ video_id %>);">添加到首页视频列表</a> &nbsp;
               </td> 
           </tr>
           <% end %>
@@ -39,7 +39,7 @@
 </article>
 
 <article class="module width_half">
-  <header><h3>当前视频列表</h3></header>
+  <header><h3>首页视频列表</h3></header>
   <div>
     <div class="module_content">
       <% if @pids.present? %>
@@ -114,7 +114,6 @@
   window.submit_hot_video = function(){
     if(window.updating)return;
     window.updating = true;
-    var $form = $("#page_form");
     $.ajax({
         type: "POST",
         url: "/admin/hot_video",

@@ -13,4 +13,8 @@ class StyleRoute < StyleController
 
   route :get, '/contact'            do dispatch(:contact_page) end
 
+  route :get, '/base'               do dispatch(:base_page) end
+
+  route :get, '/base/:name'         do dispatch(:single_base_page) end
+
 end

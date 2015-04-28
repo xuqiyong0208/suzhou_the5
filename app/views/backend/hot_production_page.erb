@@ -23,8 +23,9 @@
             <td><%~ production.title %></td> 
             <td style="padding:0;">
               <p style="display:inline-block;height:30px;margin: 0;">
-                <% if production.cover_path.url %>
-                <img height="30px" onerror="this.style.display='none';" src="<%~ production.cover_path.url %>" alt="">
+                <% cover_url = production.cover_path.url %>
+                <% if cover_url %>
+                <img height="30px" onerror="this.style.display='none';" src="<%~ cover_url %>" alt="">
                 <% end %>
               </p>
             </td> 
@@ -36,7 +37,7 @@
   </article>
 
   <article class="module width_half">
-    <header><h3>当前热销产品列表</h3></header>
+    <header><h3>热销产品列表</h3></header>
     <div>
       <div class="module_content">
         <% if @pids.present? %>
@@ -47,8 +48,9 @@
             <div class="width_one_third" style="display:inline-block;"><strong><%~ production.title %></strong>&nbsp;</div>
             <div class="width_one_third" style="display:inline-block;">
               <p style="display:inline-block;height:30px;margin: 0;">
-                <% if production.cover_path.url %>
-                <img height="30px" onerror="this.style.display='none';" src="<%~ production.cover_path.url %>" alt="">
+                <% cover_url = production.cover_path.thumb.url %>
+                <% if cover_url %>
+                <img height="30px" onerror="this.style.display='none';" src="<%~ cover_url %>" alt="">
                 <% end %>
               </div>
             <div class="width_one_third" style="display:inline-block;"><a href="javascript:remove_hot_production(<%~ production.id %>);">移除</a>&nbsp;<a href="javascript:move_up_hot_production(<%~ hot_index %>);">上移</a>&nbsp;<a href="javascript:move_down_hot_production(<%~ hot_index %>);">下移</a></div>
@@ -117,7 +119,6 @@
   window.submit_hot_production = function(){
     if(window.updating)return;
     window.updating = true;
-    var $form = $("#page_form");
     $.ajax({
         type: "POST",
         url: "/admin/hot_production",
