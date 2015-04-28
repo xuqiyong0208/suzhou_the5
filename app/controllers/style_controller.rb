@@ -45,7 +45,7 @@ class StyleController < ApplicationController
       ids = hot.content.to_s.split(",")
       if ids.present?
         ids.each do |id|
-          production = @category_with_id[id.to_i].nil?
+          production = @category_with_id[id.to_i]
           next if production.nil?
           @productions << production
         end
