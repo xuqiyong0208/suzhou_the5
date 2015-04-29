@@ -31,6 +31,25 @@ class StyleController < ApplicationController
         end
       end
     end
+
+    hot = Meta.where(name: 'hot_base', page: 1).first
+    @bases = []
+    if hot
+      ids = hot.content.to_s.split(",").first(6)
+      if ids.present?
+        original_bases = Base.where(id: ids)
+        base_dict = {}
+        original_bases.each do |base|
+          base_dict[base.id] = base
+        end
+        ids.each do |id|
+          base = base_dict[id.to_i]
+          next if base.nil?
+          @bases << base
+        end
+      end
+    end
+
     halt_page(:index_page)
   end
 

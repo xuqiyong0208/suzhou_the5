@@ -23,13 +23,28 @@
 
     <div class="right">
     	<div class="exchange"><a href="javascript:;">卡券兑换</a></div>
-        <div class="video_box">
-        	<ul>
-                <% @videos.each_with_index do |video,index| %>
-            	<li><a class="<%= "mediaplayer#{index}" %>" href="javascript:;"><i></i></a></li>
-                <% end %>
+
+        <% if @bases.present? %>
+        <div class="area_box">
+          <h1>基地展示</h1>
+            <ul>
+              <% @bases.each do |base| %>
+              <li><a href="<%~ "/base/#{base.name}" %>"><img src="<%~ base.cover_path.thumb.url %>"></a></li>
+              <% end %>
             </ul>
         </div>
+        <% end %>
+
+        <% if @videos.present? %>
+        <div class="video_box">
+          <h1>视频介绍</h1>
+        	<ul>
+            <% @videos.each_with_index do |video,index| %>
+          	<li><a class="<%= "mediaplayer#{index}" %>" href="javascript:;"><i></i></a></li>
+            <% end %>
+          </ul>
+        </div>
+        <% end %>
     </div>
     </div>
 </div>
