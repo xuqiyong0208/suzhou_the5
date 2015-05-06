@@ -3,14 +3,14 @@
   <ul>
     <% if banners.length > 0 %>
         <% banners.each do |banner| %>
-        <li style="background: url(<%~ banner[:cover_url] %>);" onclick="window.location.href='/production/<%~ banner[:production_name] %>'"></li>
+        <li style="background-image: url(<%~ banner[:cover_url] %>);" onclick="window.location.href='/production/<%~ banner[:production_name] %>'"></li>
         <% end %>
     <% else %>
-        <li style="background: url(<%~ static_url("images/ba01.jpg") %>);"></li>
-        <li style="background: url(<%~ static_url("images/ba02.jpg") %>);"></li>
-        <li style="background: url(<%~ static_url("images/ba03.jpg") %>);"></li>
-        <li style="background: url(<%~ static_url("images/ba04.jpg") %>);"></li>
-        <li style="background: url(<%~ static_url("images/ba05.jpg") %>);"></li>
+        <li style="background-image: url(<%~ static_url("images/ba01.jpg") %>);"></li>
+        <li style="background-image: url(<%~ static_url("images/ba02.jpg") %>);"></li>
+        <li style="background-image: url(<%~ static_url("images/ba03.jpg") %>);"></li>
+        <li style="background-image: url(<%~ static_url("images/ba04.jpg") %>);"></li>
+        <li style="background-image: url(<%~ static_url("images/ba05.jpg") %>);"></li>
     <% end %>
   </ul>
 </div>
