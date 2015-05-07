@@ -45,7 +45,6 @@ button {
 .head { width: 100%; background: rgba(255,255,255,0.9); position: fixed; top: 0px; z-index: 1000;}
 .logo { width: 360px; height: 90px; float: left;}
 .nav { 
-	width: 636px; 
 	height: 40px; 
 	line-height: 40px; 
 	float: left; 
@@ -53,10 +52,34 @@ button {
 	font-size: 16px;
 	margin-top: 25px;
 }
-.nav li { display: inline-block; margin: 0 20px;}
+.nav li { display: inline-block; margin: 0 10px;}
 .nav li:last-child { margin-right: 0;}
 .nav a { display: inline-block; padding: 5px 10px;}
 .nav a.hover, .nav a:hover { border-bottom: 2px #318c80 solid; color: #318c80;}
+
+
+/*----exchange兑换---*/
+.exchange { 
+	width: 120px; 
+	height: 40px; 
+	line-height: 40px; 
+	font-size: 16px; 
+	float:left; 
+	margin-left: 18px;
+	margin-top: 30px;
+}
+.exchange a { 
+	color: #FFF; 
+	display: block; 
+	text-align: center; 
+	border-radius: 2px;
+	background: #d51010; 
+	transition: background 0.2s ease-in-out;
+	-moz-transition: background 0.2s ease-in-out;
+	-webkit-transition: background 0.2s ease-in-out;
+	-o-transition: background 0.2s;
+}
+.exchange a:hover {background: #e31212; box-shadow: 0px 0px 2px rgba(0,0,0,0.3);}
 
 /*----banner----*/
 .banner { position: relative; overflow: auto; }
@@ -124,20 +147,6 @@ button {
 .ln_item:hover .s_menu { display:block;}
 
 
-/*----exchange兑换---*/
-.exchange { width: 200px; height: 40px; line-height: 40px; font-size: 16px; margin: 0 auto 30px auto;}
-.exchange a { 
-	color: #FFF; 
-	display: block; 
-	text-align: center; 
-	border-radius: 2px;
-	background: #318c80; 
-	transition: background 0.2s ease-in-out;
-	-moz-transition: background 0.2s ease-in-out;
-	-webkit-transition: background 0.2s ease-in-out;
-	-o-transition: background 0.2s;
-}
-.exchange a:hover {background: #28dcc4; box-shadow: 0px 0px 2px rgba(0,0,0,0.3);}
 
 /*----area_box---*/
 .area_box { overflow: hidden;}

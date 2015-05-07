@@ -33,5 +33,5 @@ function popup(t,b){
 	});
 }
 $(function(){
-	popup(".tab",".video_box a");//首页购买意向
+	popup(".tab",".video_box a");//
 })
