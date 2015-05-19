@@ -21,7 +21,13 @@
 
 <div class="main clear">
 	<div class="company">
-    	<div class="company_left"><img src="<%~ static_url("images/company.jpg") %>" /></div>
+    	<div class="company_left" style="position: relative;overflow: hidden;">
+        <% if @cover_url %>
+          <img src="<%~ @cover_url %>" />
+        <% else %>
+          <img src="<%~ static_url("images/company.jpg") %>" />
+        <% end %>
+      </div>
         <div class="company_right">
         	<h1>公司介绍</h1>
           <%= sanitize_content @intro.content.to_s %>

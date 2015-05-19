@@ -13,6 +13,10 @@ class BackendRoute < BackendController
 
   route :post,  '/admin/intro'          do dispatch(:do_update_intro) end
 
+  route :get,   '/admin/intro/cover'    do dispatch(:intro_cover_page) end
+
+  route :post,  '/admin/intro/cover'    do dispatch(:do_update_intro_cover) end
+
   route :get,   '/admin/contact'        do dispatch(:contact_page) end
 
   route :post,  '/admin/contact'        do dispatch(:do_update_contact) end

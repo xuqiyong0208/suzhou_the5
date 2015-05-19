@@ -83,6 +83,44 @@ class BackendController < ApplicationController
     halt_json(res: true)
   end
 
+  def intro_cover_page
+
+    meta = Meta.where(name: 'intro_cover', page: 1).first
+     if meta
+      file_id = meta.content.to_i
+      if file_id > 0
+        ueFile = UeditorFile.where(id: file_id).first
+        if ueFile
+          @cover_url = ueFile.cover_path.url
+        end
+      end
+    end
+
+    halt_page(:intro_cover_page)
+  end
+
+
+  def do_update_intro_cover
+
+    upfile = params[:cover_path]
+    halt_500 if upfile.nil? or upfile.class != Hash
+
+    ueFile = UeditorFile.new
+    ueFile.cover_path = upfile
+    halt_500 if !ueFile.save
+
+    meta = Meta.where(name: 'intro_cover', page: 1).first
+    meta ||= Meta.new(name: 'intro_cover', page: 1)
+
+    meta.content = ueFile.id
+
+    if !meta.save
+      redirect_to_error_page
+    end
+    redirect_to request.referer || "/admin"
+  end
+
+
   #联系我们管理页
   def contact_page
     record = Meta.where(name: 'contact', page: 1).first

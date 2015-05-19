@@ -99,6 +99,17 @@ class StyleController < ApplicationController
 
     set_banners
 
+    meta = Meta.where(name: 'intro_cover', page: 1).first
+     if meta
+      file_id = meta.content.to_i
+      if file_id > 0
+        ueFile = UeditorFile.where(id: file_id).first
+        if ueFile
+          @cover_url = ueFile.cover_path.url
+        end
+      end
+    end
+
     @intro = Meta.where(name: 'intro', page: 1).first
   	halt_page(:about_page)
   end

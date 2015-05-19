@@ -9,7 +9,7 @@
 
       <input type="hidden" name="id" value="<%~ @production.id %>">
 
-      <% cover_url = @production.cover_path.url %>
+      <% cover_url = @production.cover_path.thumb.url %>
       <% if cover_url %>
       <fieldset>
         <div style="height:25px;"><label>当前图片</label></div>
