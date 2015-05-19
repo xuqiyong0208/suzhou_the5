@@ -28,6 +28,13 @@
     	<div class="proBox">
         	<h1><%~ @category.title %></h1>
             <div class="proBox_con">
+              <% cover_url = @category.cover_path.thumb.url %>
+              <% if cover_url %>
+              <div class="proBox_img">
+                <img src="<%~ cover_url %>" />
+              </div>
+              <% end %>
+
               <%= sanitize_content @content.to_s %>
             </div>
         </div>
